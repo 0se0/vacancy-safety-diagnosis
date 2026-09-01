@@ -6,9 +6,28 @@ alt_vacancy_indicator.py에서 나온 두 지표(점포수 순증감률, 최근4
 공실이었음) 보고 이런 거 미리 알 수 있으면 좋겠다 싶어서 만듦.
 
 필요한 거: alt_vacancy_indicator.py의 analyze() 결과 그대로 받아서 씀
+
+★ 전력사용량 추세를 세 번째 신호로 추가(2026-09-01) — energy_vacancy_indicator.py로
+  8개구 상가정보 API를 스캔해 얻은 실제 건물명(bldNm)을 48개 상권명과 매칭한 결과,
+  다른 상권과 이름이 겹치지 않게 "구 안에서 유일하게 매칭되는 건물"만 안전하게
+  골라내니 4곳(세운상가가동·방산종합시장·통인시장·동대문패션타운 관광특구)만 남았음.
+  나머지 44곳은 (a) 이번에 스캔한 8개구 밖이거나 (b) "평화시장/청평화시장/동평화시장"처럼
+  상권명이 서로 겹쳐서 다른 상권 건물과 혼동될 위험이 있어 제외함 — 틀린 매칭으로
+  잘못된 에너지 데이터를 붙이느니 안 붙이는 쪽을 택함. MARKET_ENERGY_TREND에 없는
+  상권은 기존 2지표(점포수+폐업률) 방식 그대로 등급이 매겨짐.
 """
 
 from alt_vacancy_indicator import analyze
+
+# 4곳만 안전하게 매칭됨(위 설명 참고). 값 = 전기사용량 전반기(2024.01~2025.01)
+# 대비 후반기(2025.02~2025.12) 평균 순증감률(%). energy_vacancy_indicator.py의
+# load_energy_usage()로 실측한 24개월 전력사용량에서 계산.
+MARKET_ENERGY_TREND = {
+    "세운상가가동": -1.0,
+    "방산종합시장(방산시장)": -3.5,
+    "통인시장": 21.0,
+    "동대문패션타운 관광특구": 2.0,
+}
 
 
 def decline_to_score(net_change_pct: float) -> float:
@@ -51,9 +70,13 @@ def closure_to_score(recent_close_rate_avg: float) -> float:
     return 100.0
 
 
-def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float = 0.5):
+def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float = 0.5,
+                         w_vacancy_with_energy: float = 0.4, w_closure_with_energy: float = 0.4,
+                         w_energy: float = 0.2):
     """
-    두 지표 합쳐서 위험점수(0~100)랑 등급(A~D) 뽑음
+    지표 합쳐서 위험점수(0~100)랑 등급(A~D) 뽑음. MARKET_ENERGY_TREND에 있는 상권은
+    전력사용량 추세까지 3개 신호(0.4:0.4:0.2)로, 없는 상권은 기존 2개 신호(0.5:0.5)로
+    계산 - 표본이 4곳뿐이라 에너지 가중치를 낮게 잡음(향후 매칭 범위 넓어지면 조정).
 
     처음엔 4분위수로 그냥 25%씩 나눴었는데, 그러면 표본 수 상관없이 무조건
     D/C/B/A가 균등하게 나눠져서 이상했음. 그래서 절대기준(고정 임계값)으로 바꿈 -
@@ -68,7 +91,17 @@ def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float =
     for s in summary:
         decline_score = decline_to_score(s['net_change_pct'])
         closure_score = closure_to_score(s['recent_close_rate_avg'])
-        risk_score = round(w_vacancy * decline_score + w_closure * closure_score, 1)
+        energy_trend = MARKET_ENERGY_TREND.get(s['name'])
+
+        if energy_trend is not None:
+            energy_score = decline_to_score(energy_trend)  # 감소율->점수 변환 로직 재사용
+            risk_score = round(
+                w_vacancy_with_energy * decline_score
+                + w_closure_with_energy * closure_score
+                + w_energy * energy_score, 1)
+        else:
+            energy_score = None
+            risk_score = round(w_vacancy * decline_score + w_closure * closure_score, 1)
 
         if risk_score >= 60:
             grade = "D"
@@ -83,6 +116,7 @@ def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float =
             "name": s['name'],
             "net_change_pct": s['net_change_pct'],
             "recent_close_rate_avg": s['recent_close_rate_avg'],
+            "energy_trend_pct": energy_trend,
             "risk_score": risk_score,
             "grade": grade,
         })
@@ -130,15 +164,19 @@ def generate(rows: list) -> str:
     bar_values = json.dumps([r["risk_score"] for r in rows])
     bar_colors = json.dumps([GRADE_COLOR[r["grade"]] for r in rows])
 
+    n_with_energy = sum(1 for r in rows if r.get("energy_trend_pct") is not None)
+
     rows_html = ""
     for r in rows:
         color = GRADE_COLOR[r["grade"]]
+        energy_cell = f"{r['energy_trend_pct']:+.1f}%" if r.get("energy_trend_pct") is not None else "<span style=\"color:#c8c6bf;\">-</span>"
         rows_html += f"""<tr>
             <td>{r['name']}</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:{color};">{r['grade']}</span></td>
             <td>{r['risk_score']}</td>
             <td>{r['net_change_pct']:+.1f}%</td>
             <td>{r['recent_close_rate_avg']}%</td>
+            <td>{energy_cell}</td>
             <td style="color:{color};font-weight:600;">{GRADE_DESC[r['grade']]}</td>
         </tr>"""
 
@@ -171,13 +209,15 @@ def generate(rows: list) -> str:
 </head>
 <body>
 <h1>역산공실탐지기반 — 노후상권 안전관리 우선순위 등급 모델</h1>
-<div class="subtitle">점포수 시계열 순증감률 + 최근4분기 평균폐업률 결합 | 노후 대형상가 {n_total}곳 실측 분석</div>
+<div class="subtitle">점포수 시계열 순증감률 + 최근4분기 평균폐업률 + 전력사용량 추세({n_with_energy}곳) 결합 | 노후 대형상가 {n_total}곳 실측 분석</div>
 
 <div class="caveat">
 📍 <b>이 모델의 배경:</b> 2025.5.28 을지로 세운상가 인근 화재 당시 전체 114개 점포 중 40여개가 공실 상태였다(뉴스1·연합뉴스 보도).<br>
 국토교통부 통계상 전국 건축물의 44.4%, 상업용 건축물의 34.4%가 30년 이상 노후 건축물이다(2024년말 기준).<br>
 공실·폐업이 심화된 노후 상권은 관리 소홀로 이어져 안전사고 위험을 높일 수 있다는 문제의식에서,<br>
-이미 검증된 두 지표를 결합해 지자체·소방당국이 점검 우선순위를 정하는 데 참고할 수 있는 등급을 산출한다.
+검증된 지표를 결합해 지자체·소방당국이 점검 우선순위를 정하는 데 참고할 수 있는 등급을 산출한다.<br>
+{n_with_energy}곳은 상가정보 API 실측 건물명과 전기 사용량 데이터를 직접 대조해 확보한 전력사용량 추세까지 세 번째
+신호로 반영했다(나머지는 상권명이 서로 겹치거나 스캔 범위 밖이라 안전하게 매칭되는 건물이 없어 미반영).
 </div>
 
 <div class="kpi-grid">
@@ -207,7 +247,7 @@ def generate(rows: list) -> str:
 <div class="chart-box">
   <div class="chart-title">상세 — 등급별 산출 근거</div>
   <table>
-    <thead><tr><th>상권명</th><th style="text-align:center;">등급</th><th>위험점수</th><th>점포수 순증감률</th><th>최근4분기 평균폐업률</th><th>권고사항</th></tr></thead>
+    <thead><tr><th>상권명</th><th style="text-align:center;">등급</th><th>위험점수</th><th>점포수 순증감률</th><th>최근4분기 평균폐업률</th><th>전력사용량 추세</th><th>권고사항</th></tr></thead>
     <tbody>{rows_html}</tbody>
   </table>
 </div>
@@ -215,14 +255,16 @@ def generate(rows: list) -> str:
 <div class="note">
 ※ 방법론: 점포수 순증감률(감소할수록 위험)과 최근4분기 평균폐업률(높을수록 위험)을 각각 0~100으로
 절대기준 점수화(decline_to_score, closure_to_score — alt_vacancy_indicator.py의 고위험/중위험 실측
-임계값 -3%/-7%와 동일 기준 사용)한 뒤 동일 가중치(0.5:0.5)로 결합해 위험점수를 산출.<br>
-두 점수는 상관계수 -0.08로 서로 거의 독립적이며, 실제 위험 발생 여부를 검증할 정답 데이터가 아직 없어 동일 가중치를 적용했다.<br>
-(향후 소방·안전 점검 이력과 연계해 회귀 기반 가중치로 보완 예정).<br>
+임계값 -3%/-7%와 동일 기준 사용)한 뒤 결합해 위험점수를 산출. 전력사용량 추세가 확보된
+{n_with_energy}곳은 점포수·폐업률·전력사용량을 0.4:0.4:0.2로, 나머지 {n_total - n_with_energy}곳은
+점포수·폐업률만 0.5:0.5로 결합한다(전력 데이터는 표본이 4곳뿐이라 가중치를 낮게 잡음).<br>
+점포수·폐업률 두 점수는 상관계수 -0.08로 서로 거의 독립적이며, 실제 위험 발생 여부를 검증할 정답 데이터가
+아직 없어 균등 가중치를 적용했다(향후 소방·안전 점검 이력과 연계해 회귀 기반 가중치로 보완 예정).<br>
 표본 내 상대 순위(4분위수)가 아닌 고정 임계값(60점 이상 D, 40~60 C, 20~40 B, 20미만 A)을 사용하므로 등급 수가
 4등분으로 강제되지 않고 실제 심각도 분포에 따라 달라진다.<br> 노후 대형상가 {n_total}곳 실측 분석 결과
 D등급 {grade_counts['D']}곳·C등급 {grade_counts['C']}곳·B등급 {grade_counts['B']}곳·A등급 {grade_counts['A']}곳으로 분류됐다.<br>
-데이터: 서울시 우리마을가게 상권분석서비스(2021~2025). 향후 건축물 노후도(사용승인일)를 세 번째
-지표로 추가해 정확도를 높일 계획이다.
+데이터: 서울시 우리마을가게 상권분석서비스(2021~2025), 소상공인 상가정보 API + 한국전력 전기사용량 통계(2024~2025).
+전력사용량 매칭 범위(현재 8개구)를 넓히면 나머지 상권에도 적용할 수 있다.
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
