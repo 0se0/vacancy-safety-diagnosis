@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 14945건 표본)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f7; color: #0b0b0b; padding: 2rem; }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #898781; margin-bottom: 1.5rem; }
+  .caveat { background: #fff7ed; border-left: 3px solid #f59e0b; padding: 0.875rem 1.1rem; font-size: 12px; color: #52514e; margin-bottom: 1.5rem; line-height: 1.7; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .kpi-card { background: #f1f0eb; border-radius: 8px; padding: 1rem; text-align: center; }
+  .kpi-label { font-size: 12px; color: #898781; margin-bottom: 6px; }
+  .kpi-value { font-size: 24px; font-weight: 500; }
+  .kpi-sub { font-size: 11px; color: #898781; margin-top: 4px; }
+  .red { color: #e34948; } .gray { color: #52514e; }
+  .chart-box { background: #fff; border-radius: 12px; border: 0.5px solid rgba(11,11,11,0.1); padding: 1.25rem; }
+  .chart-title { font-size: 13px; font-weight: 500; color: #52514e; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; color: #898781; font-weight: 500; padding: 6px 8px; border-bottom: 1px solid #e8e7e2; }
+  td { padding: 6px 8px; border-bottom: 1px solid #f1f0eb; }
+  .note { font-size: 11px; color: #898781; margin-top: 1.5rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+<h1>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 14945건 표본)</h1>
+<div class="subtitle">공실 후보 14,945건 중 사용승인일 오래된 순 상위 14945건 표본 조회</div>
+
+<div class="caveat">
+📍 공실 후보는 지번 기반이라 도로명코드가 없어, 건축HUB API(getBrTitleInfo)로 상위 14945건을 개별
+조회해 새주소도로코드를 확보한 뒤 전기/가스 에너지 사용량과 조인했다. API 호출량·일일 한도 제약으로 전체
+14,945건이 아닌 표본만 우선 처리했으며, 일부 건물은 새주소 자체가 등록돼 있지 않아 매칭이 원천적으로
+불가능하다.
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">조회 시도</div>
+    <div class="kpi-value gray">14,945건</div>
+    <div class="kpi-sub">공실 후보 14,945건 중 표본</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">새주소코드 확보</div>
+    <div class="kpi-value gray">8,682건</div>
+    <div class="kpi-sub">58.1%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">에너지 사용량 확인</div>
+    <div class="kpi-value red">7,472건</div>
+    <div class="kpi-sub">공실 후보인데 에너지 사용 흔적 있음</div>
+  </div>
+</div>
+
+<div class="chart-box">
+  <div class="chart-title">공실 후보 + 에너지 사용량 (상위 200건)</div>
+  <table>
+    <thead><tr><th>구</th><th>지번주소</th><th>주용도</th><th>사용승인일</th><th>월평균 전력사용량</th><th>월평균 가스사용량</th></tr></thead>
+    <tbody><tr>
+            <td>마포구</td>
+            <td>마포구 도화동 324-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19200914</td>
+            <td>2,573 kWh</td>
+            <td>1,005 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 종로2가 39-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19230318</td>
+            <td>3,888 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 관훈동 11</td>
+            <td>제1종근린생활시설</td>
+            <td>19250812</td>
+            <td>8,485 kWh</td>
+            <td>4,514 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 인현동2가 197-17</td>
+            <td>제2종근린생활시설</td>
+            <td>19261214</td>
+            <td>1,044 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 132-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19290901</td>
+            <td>1,060 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 관훈동 57</td>
+            <td>제2종근린생활시설</td>
+            <td>19291205</td>
+            <td>7,309 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 원남동 246</td>
+            <td>제2종근린생활시설</td>
+            <td>19300522</td>
+            <td>251 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 67-27</td>
+            <td>제2종근린생활시설</td>
+            <td>19300525</td>
+            <td>751 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 116</td>
+            <td>제2종근린생활시설</td>
+            <td>19301017</td>
+            <td>748 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 275-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19301120</td>
+            <td>297 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 북창동 103-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19310514</td>
+            <td>386 kWh</td>
+            <td>5,738 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 181</td>
+            <td>제1종근린생활시설</td>
+            <td>19310520</td>
+            <td>2,480 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 70</td>
+            <td>제1종근린생활시설</td>
+            <td>19310530</td>
+            <td>305 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 195</td>
+            <td>제1종근린생활시설</td>
+            <td>19310601</td>
+            <td>314 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 쌍림동 185-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19310810</td>
+            <td>695 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 쌍림동 151-120</td>
+            <td>제2종근린생활시설</td>
+            <td>19311005</td>
+            <td>1,884 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 저동2가 10</td>
+            <td>제2종근린생활시설</td>
+            <td>19320206</td>
+            <td>10,071 kWh</td>
+            <td>18,279 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 449-6</td>
+            <td>제2종근린생활시설</td>
+            <td>19320728</td>
+            <td>9 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 114-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19320804</td>
+            <td>1 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 63-10</td>
+            <td>제2종근린생활시설</td>
+            <td>19321017</td>
+            <td>29 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 210-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19321115</td>
+            <td>1,406 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 필동1가 20-5</td>
+            <td>제1종근린생활시설</td>
+            <td>19321115</td>
+            <td>2,425 kWh</td>
+            <td>2,030 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 43-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19321205</td>
+            <td>650 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 583-92</td>
+            <td>제1종근린생활시설</td>
+            <td>19330525</td>
+            <td>302 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 123-10</td>
+            <td>제2종근린생활시설</td>
+            <td>19330605</td>
+            <td>1,609 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 131-5</td>
+            <td>제2종근린생활시설</td>
+            <td>19330613</td>
+            <td>1,787 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 457-35</td>
+            <td>제2종근린생활시설</td>
+            <td>19330715</td>
+            <td>192 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 51-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19330719</td>
+            <td>275 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 459-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19330915</td>
+            <td>21 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 인현동2가 135-4</td>
+            <td>제2종근린생활시설</td>
+            <td>19331101</td>
+            <td>907 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 284</td>
+            <td>제1종근린생활시설</td>
+            <td>19331110</td>
+            <td>99 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 457-34</td>
+            <td>제1종근린생활시설</td>
+            <td>19331115</td>
+            <td>5,044 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동2가 252-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19340420</td>
+            <td>368 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>마포구</td>
+            <td>마포구 도화동 203-4</td>
+            <td>제2종근린생활시설</td>
+            <td>19340702</td>
+            <td>3,340 kWh</td>
+            <td>1,875 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 236-322</td>
+            <td>제1종근린생활시설</td>
+            <td>19340711</td>
+            <td>22 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 330-14</td>
+            <td>제2종근린생활시설</td>
+            <td>19340801</td>
+            <td>506 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로7가 50</td>
+            <td>제2종근린생활시설</td>
+            <td>19340805</td>
+            <td>3 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 명동2가 97-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19341016</td>
+            <td>2,575 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 184-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19341030</td>
+            <td>3,218 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 330-36</td>
+            <td>제2종근린생활시설</td>
+            <td>19341031</td>
+            <td>2,156 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 오장동 196-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19341101</td>
+            <td>184 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 남대문로2가 12-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19341110</td>
+            <td>20,812 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 25</td>
+            <td>제2종근린생활시설</td>
+            <td>19341215</td>
+            <td>634 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>마포구</td>
+            <td>마포구 도화동 290-9</td>
+            <td>제1종근린생활시설</td>
+            <td>19341217</td>
+            <td>1,293 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 회현동1가 100-116</td>
+            <td>제1종근린생활시설</td>
+            <td>19350220</td>
+            <td>1,582 kWh</td>
+            <td>326 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 장충동2가 32</td>
+            <td>제1종근린생활시설</td>
+            <td>19350325</td>
+            <td>69 kWh</td>
+            <td>1,273 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 53-3</td>
+            <td>제2종근린생활시설</td>
+            <td>19350510</td>
+            <td>437 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 395-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19350610</td>
+            <td>149 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 283-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19350624</td>
+            <td>571 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 120-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19350801</td>
+            <td>-</td>
+            <td>536 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 회현동1가 134-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19350815</td>
+            <td>1 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 종로5가 321-15</td>
+            <td>제1종근린생활시설</td>
+            <td>19350909</td>
+            <td>4,488 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 64-4</td>
+            <td>제1종근린생활시설</td>
+            <td>19350910</td>
+            <td>858 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 65</td>
+            <td>제1종근린생활시설</td>
+            <td>19351026</td>
+            <td>1,440 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 12-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19351102</td>
+            <td>603 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 1236</td>
+            <td>제2종근린생활시설</td>
+            <td>19351223</td>
+            <td>825 kWh</td>
+            <td>1,395 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 461-4</td>
+            <td>제1종근린생활시설</td>
+            <td>19360110</td>
+            <td>506 kWh</td>
+            <td>669 ㎥</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 당산동6가 237-41</td>
+            <td>제2종근린생활시설</td>
+            <td>19360313</td>
+            <td>4,426 kWh</td>
+            <td>7,881 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 248-8</td>
+            <td>제2종근린생활시설</td>
+            <td>19360510</td>
+            <td>448 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 154-31</td>
+            <td>제1종근린생활시설</td>
+            <td>19360520</td>
+            <td>479 kWh</td>
+            <td>515 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 돈의동 9</td>
+            <td>제2종근린생활시설</td>
+            <td>19360522</td>
+            <td>3,104 kWh</td>
+            <td>5,234 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 340-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19360602</td>
+            <td>46 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 1172</td>
+            <td>제2종근린생활시설</td>
+            <td>19360605</td>
+            <td>1,972 kWh</td>
+            <td>37 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 340-10</td>
+            <td>제1종근린생활시설</td>
+            <td>19360610</td>
+            <td>64 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 580-16</td>
+            <td>제2종근린생활시설</td>
+            <td>19360610</td>
+            <td>150 kWh</td>
+            <td>1,682 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 인현동1가 68</td>
+            <td>제1종근린생활시설</td>
+            <td>19360611</td>
+            <td>69 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 248-26</td>
+            <td>제1종근린생활시설</td>
+            <td>19360722</td>
+            <td>1,258 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 충무로2가 8-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19360804</td>
+            <td>18,774 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 395-23</td>
+            <td>제2종근린생활시설</td>
+            <td>19361005</td>
+            <td>212 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 장충동2가 126-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19361016</td>
+            <td>444 kWh</td>
+            <td>822 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 377-3</td>
+            <td>제2종근린생활시설</td>
+            <td>19361020</td>
+            <td>210 kWh</td>
+            <td>174 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 140-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19361103</td>
+            <td>201 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 281-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19361117</td>
+            <td>208 kWh</td>
+            <td>1,360 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 247-56</td>
+            <td>제2종근린생활시설</td>
+            <td>19361117</td>
+            <td>3 kWh</td>
+            <td>2,397 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 247-37</td>
+            <td>제1종근린생활시설</td>
+            <td>19361117</td>
+            <td>-</td>
+            <td>624 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 247-24</td>
+            <td>제1종근린생활시설</td>
+            <td>19361117</td>
+            <td>-</td>
+            <td>624 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 248-33</td>
+            <td>제1종근린생활시설</td>
+            <td>19361117</td>
+            <td>646 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 1217</td>
+            <td>제2종근린생활시설</td>
+            <td>19361130</td>
+            <td>526 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 189-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19361221</td>
+            <td>2,860 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 하왕십리동 989-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19370113</td>
+            <td>1,773 kWh</td>
+            <td>1,258 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 330-39</td>
+            <td>제1종근린생활시설</td>
+            <td>19370320</td>
+            <td>781 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 마장동 443-22</td>
+            <td>제1종근린생활시설</td>
+            <td>19370410</td>
+            <td>1,907 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 종로4가 176-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19370420</td>
+            <td>8,987 kWh</td>
+            <td>12,472 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 330</td>
+            <td>제1종근린생활시설</td>
+            <td>19370504</td>
+            <td>1,196 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 128</td>
+            <td>제1종근린생활시설</td>
+            <td>19370510</td>
+            <td>691 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 165</td>
+            <td>제2종근린생활시설</td>
+            <td>19370513</td>
+            <td>85 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 395-14</td>
+            <td>제2종근린생활시설</td>
+            <td>19370515</td>
+            <td>447 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 330-38</td>
+            <td>제1종근린생활시설</td>
+            <td>19370517</td>
+            <td>1 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 회현동1가 148-5</td>
+            <td>제2종근린생활시설</td>
+            <td>19370520</td>
+            <td>1,525 kWh</td>
+            <td>2,997 ㎥</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동5가 41-13</td>
+            <td>제1종근린생활시설</td>
+            <td>19370522</td>
+            <td>278 kWh</td>
+            <td>517 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 138-66</td>
+            <td>제2종근린생활시설</td>
+            <td>19370710</td>
+            <td>38 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 삼청동 27-22</td>
+            <td>제2종근린생활시설</td>
+            <td>19370909</td>
+            <td>565 kWh</td>
+            <td>384 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 삼청동 27-18</td>
+            <td>제1종근린생활시설</td>
+            <td>19370909</td>
+            <td>745 kWh</td>
+            <td>1,106 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 287-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19370920</td>
+            <td>541 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 65-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19371020</td>
+            <td>130 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 169-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19371030</td>
+            <td>4,276 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 7-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19371105</td>
+            <td>164 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 187-15</td>
+            <td>제1종근린생활시설</td>
+            <td>19380111</td>
+            <td>1 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 154-4</td>
+            <td>제2종근린생활시설</td>
+            <td>19380619</td>
+            <td>2,198 kWh</td>
+            <td>473 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 321-8</td>
+            <td>제2종근린생활시설</td>
+            <td>19380701</td>
+            <td>3,313 kWh</td>
+            <td>5,034 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 104-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19380830</td>
+            <td>2,894 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로5가 7-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19380910</td>
+            <td>5,132 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 169-15</td>
+            <td>제2종근린생활시설</td>
+            <td>19380915</td>
+            <td>1,454 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창성동 98-7</td>
+            <td>제2종근린생활시설</td>
+            <td>19381012</td>
+            <td>2,090 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 당산동1가 256-126</td>
+            <td>제1종근린생활시설</td>
+            <td>19381031</td>
+            <td>416 kWh</td>
+            <td>472 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 395-5</td>
+            <td>제1종근린생활시설</td>
+            <td>19381220</td>
+            <td>14 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로7가 11-4</td>
+            <td>제1종근린생활시설</td>
+            <td>19390100</td>
+            <td>839 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 남산동2가 14-5</td>
+            <td>제1종근린생활시설</td>
+            <td>19390215</td>
+            <td>86 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 마장동 450-36</td>
+            <td>제1종근린생활시설</td>
+            <td>19390530</td>
+            <td>170 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 387-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19390710</td>
+            <td>1,532 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 313-6</td>
+            <td>제2종근린생활시설</td>
+            <td>19391030</td>
+            <td>31 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 황학동 1901</td>
+            <td>제1종근린생활시설</td>
+            <td>19391111</td>
+            <td>240 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 329-5</td>
+            <td>제1종근린생활시설</td>
+            <td>19391120</td>
+            <td>31 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 충신동 105-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19400305</td>
+            <td>2,950 kWh</td>
+            <td>1,702 ㎥</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 성수동1가 294</td>
+            <td>제2종근린생활시설</td>
+            <td>19400329</td>
+            <td>7,740 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 팔판동 64</td>
+            <td>제1종근린생활시설</td>
+            <td>19400408</td>
+            <td>408 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 85-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19400510</td>
+            <td>512 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 61-99</td>
+            <td>제2종근린생활시설</td>
+            <td>19400514</td>
+            <td>182 kWh</td>
+            <td>657 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 203-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19400530</td>
+            <td>514 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 206-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19400530</td>
+            <td>1,083 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 395-34</td>
+            <td>제1종근린생활시설</td>
+            <td>19400610</td>
+            <td>446 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 395-31</td>
+            <td>제1종근린생활시설</td>
+            <td>19400610</td>
+            <td>259 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 황학동 1156</td>
+            <td>제1종근린생활시설</td>
+            <td>19400815</td>
+            <td>40 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 쌍림동 258</td>
+            <td>제1종근린생활시설</td>
+            <td>19400820</td>
+            <td>709 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 165</td>
+            <td>제1종근린생활시설</td>
+            <td>19400915</td>
+            <td>1,005 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 팔판동 90</td>
+            <td>제1종근린생활시설</td>
+            <td>19410118</td>
+            <td>118 kWh</td>
+            <td>1,184 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 산림동 282</td>
+            <td>제1종근린생활시설</td>
+            <td>19410210</td>
+            <td>582 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창성동 138-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19410320</td>
+            <td>342 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 당산동1가 253</td>
+            <td>제1종근린생활시설</td>
+            <td>19410326</td>
+            <td>180 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 팔판동 16-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19410424</td>
+            <td>142 kWh</td>
+            <td>723 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로6가 18-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19410601</td>
+            <td>34,805 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 233-55</td>
+            <td>제1종근린생활시설</td>
+            <td>19410810</td>
+            <td>142 kWh</td>
+            <td>321 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 76-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19411224</td>
+            <td>115 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동3가 29-10</td>
+            <td>제1종근린생활시설</td>
+            <td>19420118</td>
+            <td>1,500 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동3가 29-8</td>
+            <td>제1종근린생활시설</td>
+            <td>19420118</td>
+            <td>1,674 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동3가 29-3</td>
+            <td>제2종근린생활시설</td>
+            <td>19420118</td>
+            <td>891 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동3가 29-5</td>
+            <td>제2종근린생활시설</td>
+            <td>19420118</td>
+            <td>1,497 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 459-28</td>
+            <td>제1종근린생활시설</td>
+            <td>19420522</td>
+            <td>208 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 저동1가 79-5</td>
+            <td>제2종근린생활시설</td>
+            <td>19420730</td>
+            <td>29 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 115</td>
+            <td>제2종근린생활시설</td>
+            <td>19420805</td>
+            <td>1,172 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 236-90</td>
+            <td>제2종근린생활시설</td>
+            <td>19430115</td>
+            <td>528 kWh</td>
+            <td>1,817 ㎥</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 마장동 460-9</td>
+            <td>제1종근린생활시설</td>
+            <td>19430130</td>
+            <td>882 kWh</td>
+            <td>360 ㎥</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동4가 30-7</td>
+            <td>제2종근린생활시설</td>
+            <td>19430701</td>
+            <td>274 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 오장동 181-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19430810</td>
+            <td>1,297 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 559</td>
+            <td>제2종근린생활시설</td>
+            <td>19431015</td>
+            <td>2,839 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 119-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19431130</td>
+            <td>1,402 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 성수동1가 129-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19431220</td>
+            <td>809 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 남창동 209-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19431231</td>
+            <td>758 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동2가 253</td>
+            <td>제1종근린생활시설</td>
+            <td>19440224</td>
+            <td>249 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 81-22</td>
+            <td>제2종근린생활시설</td>
+            <td>19440530</td>
+            <td>2,000 kWh</td>
+            <td>1,163 ㎥</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 당산동1가 32</td>
+            <td>제1종근린생활시설</td>
+            <td>19440624</td>
+            <td>271 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동4가 32-41</td>
+            <td>제1종근린생활시설</td>
+            <td>19441002</td>
+            <td>208 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동4가 32-42</td>
+            <td>제2종근린생활시설</td>
+            <td>19441002</td>
+            <td>378 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>마포구</td>
+            <td>마포구 노고산동 31-41</td>
+            <td>제1종근린생활시설</td>
+            <td>19441221</td>
+            <td>269 kWh</td>
+            <td>377 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 2-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19450420</td>
+            <td>1,185 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 6</td>
+            <td>제2종근린생활시설</td>
+            <td>19450501</td>
+            <td>161 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동2가 250-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19450812</td>
+            <td>519 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동1가 90-4</td>
+            <td>제2종근린생활시설</td>
+            <td>19461017</td>
+            <td>1 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 낙원동 2</td>
+            <td>제1종근린생활시설</td>
+            <td>19461030</td>
+            <td>658 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 186-5</td>
+            <td>제1종근린생활시설</td>
+            <td>19470320</td>
+            <td>633 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 황학동 1241</td>
+            <td>제1종근린생활시설</td>
+            <td>19470520</td>
+            <td>65 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 관훈동 56-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19470709</td>
+            <td>1,093 kWh</td>
+            <td>352 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 숭인동 62-8</td>
+            <td>제1종근린생활시설</td>
+            <td>19471010</td>
+            <td>524 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 익선동 26-2</td>
+            <td>제1종근린생활시설</td>
+            <td>19471115</td>
+            <td>1,715 kWh</td>
+            <td>3,494 ㎥</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동2가 165</td>
+            <td>제1종근린생활시설</td>
+            <td>19480109</td>
+            <td>1,354 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 와룡동 43</td>
+            <td>제2종근린생활시설</td>
+            <td>19480615</td>
+            <td>3,015 kWh</td>
+            <td>119 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 651-45</td>
+            <td>제2종근린생활시설</td>
+            <td>19480820</td>
+            <td>1,093 kWh</td>
+            <td>1,786 ㎥</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 438-4</td>
+            <td>제2종근린생활시설</td>
+            <td>19480824</td>
+            <td>799 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동5가 23-9</td>
+            <td>제1종근린생활시설</td>
+            <td>19480909</td>
+            <td>152 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 84</td>
+            <td>제2종근린생활시설</td>
+            <td>19480911</td>
+            <td>32 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동2가 185</td>
+            <td>제1종근린생활시설</td>
+            <td>19480913</td>
+            <td>71 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 연지동 197-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19481005</td>
+            <td>36 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 287-37</td>
+            <td>제1종근린생활시설</td>
+            <td>19481015</td>
+            <td>224 kWh</td>
+            <td>788 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 140-9</td>
+            <td>제1종근린생활시설</td>
+            <td>19481102</td>
+            <td>1,690 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 권농동 171-25</td>
+            <td>제1종근린생활시설</td>
+            <td>19481230</td>
+            <td>571 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동4가 435-9</td>
+            <td>제1종근린생활시설</td>
+            <td>19490210</td>
+            <td>3,637 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동4가 435-18</td>
+            <td>제1종근린생활시설</td>
+            <td>19490210</td>
+            <td>3,637 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 문래동4가 28-12</td>
+            <td>제1종근린생활시설</td>
+            <td>19490504</td>
+            <td>687 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 초동 39-8</td>
+            <td>제2종근린생활시설</td>
+            <td>19490610</td>
+            <td>436 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 초동 41-6</td>
+            <td>제2종근린생활시설</td>
+            <td>19490630</td>
+            <td>2,510 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로3가 229-5</td>
+            <td>제1종근린생활시설</td>
+            <td>19490710</td>
+            <td>202 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 187-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19490710</td>
+            <td>1,230 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 436-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19490810</td>
+            <td>11,346 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 당산동1가 200-4</td>
+            <td>제1종근린생활시설</td>
+            <td>19490810</td>
+            <td>2 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 원남동 242-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19490915</td>
+            <td>2 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 330-333</td>
+            <td>제2종근린생활시설</td>
+            <td>19491002</td>
+            <td>605 kWh</td>
+            <td>1,549 ㎥</td>
+        </tr><tr>
+            <td>성동구</td>
+            <td>성동구 하왕십리동 946-32</td>
+            <td>제1종근린생활시설</td>
+            <td>19491013</td>
+            <td>573 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동3가 22-5</td>
+            <td>제2종근린생활시설</td>
+            <td>19491023</td>
+            <td>5,838 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로6가 23-5</td>
+            <td>제2종근린생활시설</td>
+            <td>19491101</td>
+            <td>5,988 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 옥인동 127-2</td>
+            <td>제2종근린생활시설</td>
+            <td>19491115</td>
+            <td>194 kWh</td>
+            <td>770 ㎥</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 광희동1가 106-1</td>
+            <td>제2종근린생활시설</td>
+            <td>19491203</td>
+            <td>385 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 271-6</td>
+            <td>제1종근린생활시설</td>
+            <td>19491207</td>
+            <td>1,067 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 연지동 49</td>
+            <td>제1종근린생활시설</td>
+            <td>19491219</td>
+            <td>1,248 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 주교동 284-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19491227</td>
+            <td>629 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>영등포구</td>
+            <td>영등포구 영등포동6가 69-7</td>
+            <td>제2종근린생활시설</td>
+            <td>19500330</td>
+            <td>647 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 종로6가 197</td>
+            <td>제2종근린생활시설</td>
+            <td>19500420</td>
+            <td>176 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 남대문로5가 158</td>
+            <td>제2종근린생활시설</td>
+            <td>19500502</td>
+            <td>7,971 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 인현동1가 27-3</td>
+            <td>제1종근린생활시설</td>
+            <td>19500510</td>
+            <td>137 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 혜화동 202</td>
+            <td>제2종근린생활시설</td>
+            <td>19500520</td>
+            <td>4,780 kWh</td>
+            <td>-</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로5가 78-1</td>
+            <td>제1종근린생활시설</td>
+            <td>19500520</td>
+            <td>1,625 kWh</td>
+            <td>-</td>
+        </tr></tbody>
+  </table>
+</div>
+
+<div class="note">
+※ "에너지 사용량 확인"된 건물은 상가정보 API엔 안 잡혔지만 전기/가스는 쓰고 있는 곳이다 — 완전공실이 아니라
+비신고 영업, 개인 창고 활용, 최근 개업(API 미반영 시차) 등일 수 있다. 반대로 여기 없는 건물(새주소코드는
+확보했지만 에너지 데이터에도 안 잡히는 곳)이 오히려 완전공실에 더 가까운 후보다.<br>
+전체 목록은 cvs/vacancy_candidates_with_energy.csv에 저장.
+</div>
+
+</body>
+</html>
