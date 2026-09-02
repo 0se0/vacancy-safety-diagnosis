@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>역산공실탐지기반 — 공실 후보 스크리닝 (8개구 상업용도 전수조사)</title>
+<title>역산공실탐지기반 — 공실 후보 스크리닝 (서울 25개구 상업용도 전수조사)</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f7; color: #0b0b0b; padding: 2rem; }
@@ -26,39 +26,39 @@
 </style>
 </head>
 <body>
-<h1>역산공실탐지기반 — 공실 후보 스크리닝 (8개구 상업용도 전수조사)</h1>
-<div class="subtitle">건축물대장(근린생활시설·판매시설) 49,234건 vs 상가정보 API 실제영업중 61,409건 차집합</div>
+<h1>역산공실탐지기반 — 공실 후보 스크리닝 (서울 25개구 상업용도 전수조사)</h1>
+<div class="subtitle">건축물대장(근린생활시설·판매시설) 116,571건 vs 상가정보 API 실제영업중 160,419건 차집합</div>
 
 <div class="caveat">
 📍 <b>이 지표의 배경:</b> 건축물대장에서 주용도가 근린생활시설(1종/2종)·판매시설인 상업용 건물만 걸러낸 뒤,
 같은 지번(시군구·법정동·번·지)에 상가정보 API 실측 결과 영업 중인 사업체가 하나도 없는 건물을 공실 후보로 추출했다.<br>
-verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 8개구 상업용 건물 전체(49,234건) 규모로 확장한 버전이다.<br>
+verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 서울 25개구 상업용 건물 전체(116,571건) 규모로 확장한 버전이다.<br>
 ⚠️ 상가정보 API에 누락된 최근 개업 업체, 지번-법정동명 표기 차이로 인한 미스매치 등으로 인한 오탐이 섞여 있을 수 있어
 "확정 공실"이 아니라 "현장 확인이 필요한 후보"로 해석해야 한다.
 </div>
 
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-label">상업용 건물 (8개구 전체)</div>
-    <div class="kpi-value gray">49,234</div>
+    <div class="kpi-label">상업용 건물 (서울 25개구 전체)</div>
+    <div class="kpi-value gray">116,571</div>
     <div class="kpi-sub">근린생활시설·판매시설</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">실제 영업중 지번(상가정보 API)</div>
-    <div class="kpi-value gray">61,409</div>
-    <div class="kpi-sub">8개구 전수 스캔</div>
+    <div class="kpi-value gray">160,419</div>
+    <div class="kpi-sub">25개구 전수 스캔</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">공실 후보</div>
-    <div class="kpi-value red">14,945</div>
-    <div class="kpi-sub">전체의 30.4%</div>
+    <div class="kpi-value red">33,135</div>
+    <div class="kpi-sub">전체의 28.4%</div>
   </div>
 </div>
 
 <div class="chart-grid">
   <div class="chart-box">
     <div class="chart-title">구별 공실 후보 수</div>
-    <table><thead><tr><th>구</th><th>후보수</th></tr></thead><tbody><tr><td>중구</td><td>3,210</td></tr><tr><td>종로구</td><td>2,972</td></tr><tr><td>영등포구</td><td>2,594</td></tr><tr><td>강남구</td><td>1,662</td></tr><tr><td>성동구</td><td>1,372</td></tr><tr><td>마포구</td><td>1,356</td></tr><tr><td>강북구</td><td>972</td></tr><tr><td>광진구</td><td>807</td></tr></tbody></table>
+    <table><thead><tr><th>구</th><th>후보수</th></tr></thead><tbody><tr><td>중구</td><td>3,210</td></tr><tr><td>종로구</td><td>2,972</td></tr><tr><td>영등포구</td><td>2,594</td></tr><tr><td>동대문구</td><td>2,373</td></tr><tr><td>용산구</td><td>1,918</td></tr><tr><td>성북구</td><td>1,850</td></tr><tr><td>강남구</td><td>1,662</td></tr><tr><td>관악구</td><td>1,486</td></tr><tr><td>성동구</td><td>1,372</td></tr><tr><td>마포구</td><td>1,356</td></tr><tr><td>서대문구</td><td>1,125</td></tr><tr><td>구로구</td><td>1,084</td></tr><tr><td>중랑구</td><td>1,074</td></tr><tr><td>은평구</td><td>1,026</td></tr><tr><td>강북구</td><td>972</td></tr><tr><td>강서구</td><td>948</td></tr><tr><td>동작구</td><td>877</td></tr><tr><td>광진구</td><td>807</td></tr><tr><td>서초구</td><td>785</td></tr><tr><td>송파구</td><td>758</td></tr><tr><td>강동구</td><td>596</td></tr><tr><td>양천구</td><td>596</td></tr><tr><td>도봉구</td><td>588</td></tr><tr><td>노원구</td><td>567</td></tr><tr><td>금천구</td><td>539</td></tr></tbody></table>
   </div>
   <div class="chart-box">
     <div class="chart-title">공실 후보 상세 (사용승인일 오래된 순, 상위 300건)</div>
@@ -89,6 +89,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>3</td>
             <td>19120910</td>
         </tr><tr>
+            <td>은평구</td>
+            <td>은평구 구산동 71</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>1</td>
+            <td>19160601</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 초동 53-12</td>
             <td></td>
@@ -96,6 +104,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>34.71</td>
             <td>1</td>
             <td>19160602</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 갈월동 69-39</td>
+            <td></td>
+            <td>근린생활시설</td>
+            <td>310.57</td>
+            <td>2</td>
+            <td>19161027</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 237-43</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>34.94</td>
+            <td>1</td>
+            <td>19180201</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 무교동 12</td>
@@ -112,6 +136,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>32.36</td>
             <td>1</td>
             <td>19200914</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로2가 76-9</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>41.98</td>
+            <td>1</td>
+            <td>19221007</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 만리동1가 16-2</td>
@@ -153,6 +185,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19250812</td>
         </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 청량리동 277</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>109.09</td>
+            <td>1</td>
+            <td>19260708</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 인현동2가 197-17</td>
             <td></td>
@@ -169,6 +209,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19271005</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동1가 158</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>22.51</td>
+            <td>1</td>
+            <td>19290114</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동1가 162</td>
+            <td></td>
+            <td>판매시설</td>
+            <td>109.09</td>
+            <td>1</td>
+            <td>19290504</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 방산동 2-1</td>
             <td></td>
@@ -176,6 +232,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>89.45</td>
             <td>1</td>
             <td>19290530</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 한강로1가 19</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>94.16</td>
+            <td>2</td>
+            <td>19290602</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 광희동2가 8-2</td>
@@ -209,6 +273,38 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19290901</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 효창동 152</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>82.14</td>
+            <td>2</td>
+            <td>19290915</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 266-58</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>39.67</td>
+            <td>1</td>
+            <td>19290915</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로3가 43-3</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>46.28</td>
+            <td>2</td>
+            <td>19290928</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 후암동 439</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>105.78</td>
+            <td>2</td>
+            <td>19291102</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 관훈동 57</td>
             <td></td>
@@ -216,6 +312,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>53.79</td>
             <td>1</td>
             <td>19291205</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 33-80</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>19.83</td>
+            <td>1</td>
+            <td>19300414</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로2가 58-2</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>109.98</td>
+            <td>2</td>
+            <td>19300512</td>
         </tr><tr>
             <td>종로구</td>
             <td>종로구 원남동 246</td>
@@ -241,6 +353,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19300530</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 한강로2가 318</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>220.79</td>
+            <td>2</td>
+            <td>19300624</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 만리동2가 229</td>
             <td></td>
@@ -248,6 +368,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>35.7</td>
             <td>1</td>
             <td>19300706</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 27-9</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>79.87</td>
+            <td>1</td>
+            <td>19300801</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 만리동1가 67</td>
@@ -265,13 +393,13 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19300916</td>
         </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로4가 17</td>
+            <td>용산구</td>
+            <td>용산구 용문동 28-1</td>
             <td></td>
             <td>제1종근린생활시설</td>
-            <td>61.13</td>
-            <td>2</td>
-            <td>19300930</td>
+            <td>59.5</td>
+            <td>1</td>
+            <td>19300924</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 을지로4가 18</td>
@@ -282,6 +410,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19300930</td>
         </tr><tr>
             <td>중구</td>
+            <td>중구 을지로4가 17</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>61.13</td>
+            <td>2</td>
+            <td>19300930</td>
+        </tr><tr>
+            <td>중구</td>
             <td>중구 을지로3가 18</td>
             <td></td>
             <td>제1종근린생활시설</td>
@@ -289,13 +425,13 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19300930</td>
         </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로4가 25</td>
+            <td>서대문구</td>
+            <td>서대문구 충정로3가 358</td>
             <td></td>
-            <td>제1종근린생활시설</td>
-            <td>536.49</td>
-            <td>3</td>
-            <td>19301001</td>
+            <td>제2종근린생활시설</td>
+            <td>76.03</td>
+            <td>1</td>
+            <td>19300930</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 만리동2가 171-3</td>
@@ -303,6 +439,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>제1종근린생활시설</td>
             <td>19.83</td>
             <td>1</td>
+            <td>19301001</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 을지로4가 25</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>536.49</td>
+            <td>3</td>
             <td>19301001</td>
         </tr><tr>
             <td>중구</td>
@@ -337,6 +481,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19301020</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 26-14</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>72.74</td>
+            <td>2</td>
+            <td>19301023</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 주교동 275-2</td>
             <td></td>
@@ -345,6 +497,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19301120</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동2가 75-1</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>125.2</td>
+            <td>2</td>
+            <td>19301205</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 만리동2가 230</td>
             <td></td>
@@ -352,6 +512,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>56.2</td>
             <td>1</td>
             <td>19301210</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로3가 57-1</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>8.22</td>
+            <td>1</td>
+            <td>19301230</td>
+        </tr><tr>
+            <td>은평구</td>
+            <td>은평구 수색동 403</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>95.14</td>
+            <td>1</td>
+            <td>19310210</td>
         </tr><tr>
             <td>영등포구</td>
             <td>영등포구 영등포동4가 65</td>
@@ -368,6 +544,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>281.81</td>
             <td>2</td>
             <td>19310514</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동3가 111-5</td>
+            <td></td>
+            <td>근린생활시설</td>
+            <td>22.68</td>
+            <td>1</td>
+            <td>19310519</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 주교동 181</td>
@@ -400,6 +584,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>119.01</td>
             <td>2</td>
             <td>19310615</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로2가 52-16</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>56.54</td>
+            <td>2</td>
+            <td>19310708</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동2가 130-2</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>197.35</td>
+            <td>2</td>
+            <td>19310810</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 쌍림동 185-1</td>
@@ -465,6 +665,30 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19320503</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로3가 171-3</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>10.8</td>
+            <td>2</td>
+            <td>19320616</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 266-63</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>1</td>
+            <td>19320620</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 충정로3가 281-22</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>32.47</td>
+            <td>1</td>
+            <td>19320701</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 숭인동 258-3</td>
             <td></td>
@@ -473,6 +697,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19320702</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 41-15</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>65.45</td>
+            <td>1</td>
+            <td>19320705</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 462-8</td>
             <td></td>
@@ -480,6 +712,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>58.52</td>
             <td>1</td>
             <td>19320710</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 한강로3가 7-14</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>72.73</td>
+            <td>2</td>
+            <td>19320711</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 장충동2가 50-2</td>
@@ -496,6 +736,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>39.67</td>
             <td>1</td>
             <td>19320728</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 충정로3가 281-26</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>26.45</td>
+            <td>1</td>
+            <td>19320730</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 을지로4가 114-2</td>
@@ -521,13 +769,13 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19320805</td>
         </tr><tr>
-            <td>중구</td>
-            <td>중구 충정로1가 14-1</td>
+            <td>용산구</td>
+            <td>용산구 한강로3가 63</td>
             <td></td>
             <td>제1종근린생활시설</td>
-            <td>261.16</td>
-            <td>2</td>
-            <td>19320903</td>
+            <td>115.7</td>
+            <td>1</td>
+            <td>19320830</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 을지로3가 149</td>
@@ -538,12 +786,68 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19320903</td>
         </tr><tr>
             <td>중구</td>
+            <td>중구 충정로1가 14-1</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>261.16</td>
+            <td>2</td>
+            <td>19320903</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 236-1</td>
+            <td></td>
+            <td>근린생활시설</td>
+            <td>99.18</td>
+            <td>2</td>
+            <td>19321011</td>
+        </tr><tr>
+            <td>중구</td>
             <td>중구 광희동1가 63-10</td>
             <td></td>
             <td>제2종근린생활시설</td>
             <td>58.94</td>
             <td>1</td>
             <td>19321017</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 5</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>39.66</td>
+            <td>2</td>
+            <td>19321020</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 동자동 9-10</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>99.17</td>
+            <td>2</td>
+            <td>19321026</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동1가 149-2</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>264.46</td>
+            <td>2</td>
+            <td>19321030</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 240-10</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>27.54</td>
+            <td>1</td>
+            <td>19321106</td>
+        </tr><tr>
+            <td>성북구</td>
+            <td>성북구 성북동 217-77</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>19.83</td>
+            <td>1</td>
+            <td>19321106</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 을지로5가 19-8</td>
@@ -577,6 +881,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19321115</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동3가 111-2</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>13.22</td>
+            <td>1</td>
+            <td>19321130</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 산림동 43-1</td>
             <td></td>
@@ -601,6 +913,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19321220</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 240-9</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>17.85</td>
+            <td>1</td>
+            <td>19330103</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로2가 77-16</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>69.35</td>
+            <td>1</td>
+            <td>19330309</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 광희동2가 190</td>
             <td></td>
@@ -617,6 +945,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19330525</td>
         </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 영천동 341-10</td>
+            <td></td>
+            <td>근린생활시설</td>
+            <td>155.37</td>
+            <td>2</td>
+            <td>19330530</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동2가 35-1</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>55.34</td>
+            <td>1</td>
+            <td>19330601</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 주교동 123-10</td>
             <td></td>
@@ -632,6 +976,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>43.83</td>
             <td>1</td>
             <td>19330613</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동1가 179</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>128.92</td>
+            <td>2</td>
+            <td>19330618</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 을지로5가 19-14</td>
@@ -657,6 +1009,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19330719</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 효창동 81-2</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>10.25</td>
+            <td>1</td>
+            <td>19330809</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 459-2</td>
             <td></td>
@@ -680,6 +1040,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>79.58</td>
             <td>1</td>
             <td>19331010</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 냉천동 191</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>66.12</td>
+            <td>2</td>
+            <td>19331010</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 휘경동 49-72</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>16.53</td>
+            <td>1</td>
+            <td>19331015</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 충무로1가 47</td>
@@ -713,6 +1089,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19331115</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 남영동 51-5</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>76.73</td>
+            <td>2</td>
+            <td>19331201</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 330-26</td>
             <td></td>
@@ -737,6 +1121,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19340315</td>
         </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 충정로3가 279-1</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>20.38</td>
+            <td>1</td>
+            <td>19340320</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 광희동2가 252-2</td>
             <td></td>
@@ -745,6 +1137,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19340420</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 39-23</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>26.45</td>
+            <td>1</td>
+            <td>19340424</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 충정로2가 69-11</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>167.27</td>
+            <td>1</td>
+            <td>19340510</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 만리동2가 216</td>
             <td></td>
@@ -752,6 +1160,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>46.28</td>
             <td>1</td>
             <td>19340520</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 235-19</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>43.44</td>
+            <td>1</td>
+            <td>19340530</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 주교동 156-3</td>
@@ -817,6 +1233,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19340805</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동3가 43</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>74.74</td>
+            <td>2</td>
+            <td>19340810</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 주교동 201</td>
             <td></td>
@@ -824,6 +1248,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>95.87</td>
             <td>2</td>
             <td>19340830</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 11-5</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>41.32</td>
+            <td>2</td>
+            <td>19341011</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 중림동 154</td>
@@ -858,18 +1290,18 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19341031</td>
         </tr><tr>
             <td>중구</td>
-            <td>중구 충무로2가 100</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>221.49</td>
-            <td>2</td>
-            <td>19341101</td>
-        </tr><tr>
-            <td>중구</td>
             <td>중구 오장동 196-1</td>
             <td></td>
             <td>제1종근린생활시설</td>
             <td>129.02</td>
+            <td>2</td>
+            <td>19341101</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 충무로2가 100</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>221.49</td>
             <td>2</td>
             <td>19341101</td>
         </tr><tr>
@@ -881,6 +1313,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>5</td>
             <td>19341110</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 청파동1가 180-27</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>76.96</td>
+            <td>2</td>
+            <td>19341120</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 관훈동 29-21</td>
             <td></td>
@@ -888,6 +1328,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>61.62</td>
             <td>1</td>
             <td>19341206</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 한강로3가 3-17</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>307.44</td>
+            <td>2</td>
+            <td>19341208</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로1가 87-3</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>125.62</td>
+            <td>2</td>
+            <td>19341210</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 산림동 25</td>
@@ -913,6 +1369,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19350220</td>
         </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 냉천동 196</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>13.22</td>
+            <td>1</td>
+            <td>19350310</td>
+        </tr><tr>
+            <td>성북구</td>
+            <td>성북구 보문동2가 96</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>33.39</td>
+            <td>1</td>
+            <td>19350320</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 관훈동 29-20</td>
             <td></td>
@@ -929,6 +1401,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19350325</td>
         </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 전농동 596-5</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>535.54</td>
+            <td>2</td>
+            <td>19350410</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 현저동 961</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>89.26</td>
+            <td>2</td>
+            <td>19350502</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 53-3</td>
             <td></td>
@@ -936,6 +1424,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19.83</td>
             <td>1</td>
             <td>19350510</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 영천동 121</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>23.14</td>
+            <td>1</td>
+            <td>19350610</td>
         </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 395-2</td>
@@ -985,6 +1481,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19350710</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 237-1</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>194.29</td>
+            <td>2</td>
+            <td>19350720</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 237-3</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>194.29</td>
+            <td>2</td>
+            <td>19350720</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 120-2</td>
             <td></td>
@@ -1009,19 +1521,35 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19350815</td>
         </tr><tr>
-            <td>종로구</td>
-            <td>종로구 종로5가 321-15</td>
+            <td>용산구</td>
+            <td>용산구 서계동 33-95</td>
             <td></td>
             <td>제1종근린생활시설</td>
-            <td>26.36</td>
+            <td>13.22</td>
             <td>1</td>
-            <td>19350909</td>
+            <td>19350830</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 25-6</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>58.22</td>
+            <td>1</td>
+            <td>19350905</td>
         </tr><tr>
             <td>영등포구</td>
             <td>영등포구 당산동6가 345-12</td>
             <td></td>
             <td>제1종근린생활시설</td>
             <td>10</td>
+            <td>1</td>
+            <td>19350909</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 종로5가 321-15</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>26.36</td>
             <td>1</td>
             <td>19350909</td>
         </tr><tr>
@@ -1040,6 +1568,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>52.89</td>
             <td>2</td>
             <td>19350917</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 후암동 265-19</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>6.8</td>
+            <td>2</td>
+            <td>19351005</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 중림동 140</td>
@@ -1073,6 +1609,30 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19351102</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 용문동 41-33</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>42.41</td>
+            <td>2</td>
+            <td>19351102</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 영천동 4-325</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>16.53</td>
+            <td>1</td>
+            <td>19351107</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 신계동 19-9</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>29.75</td>
+            <td>1</td>
+            <td>19351110</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 의주로2가 2-3</td>
             <td></td>
@@ -1105,6 +1665,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19360110</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 234-21</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>1</td>
+            <td>19360301</td>
+        </tr><tr>
             <td>영등포구</td>
             <td>영등포구 당산동6가 237-41</td>
             <td></td>
@@ -1120,6 +1688,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>31.01</td>
             <td>1</td>
             <td>19360330</td>
+        </tr><tr>
+            <td>성북구</td>
+            <td>성북구 동소문동4가 33</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>132.2</td>
+            <td>2</td>
+            <td>19360331</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 을지로1가 192-6</td>
@@ -1169,20 +1745,20 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19360510</td>
         </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 154-31</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>23.14</td>
-            <td>1</td>
-            <td>19360520</td>
-        </tr><tr>
             <td>성동구</td>
             <td>성동구 홍익동 481</td>
             <td></td>
             <td>제1종근린생활시설</td>
             <td>72.72</td>
             <td>2</td>
+            <td>19360520</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 154-31</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>23.14</td>
+            <td>1</td>
             <td>19360520</td>
         </tr><tr>
             <td>종로구</td>
@@ -1210,18 +1786,18 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19360605</td>
         </tr><tr>
             <td>종로구</td>
-            <td>종로구 창신동 340-10</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>23.14</td>
-            <td>1</td>
-            <td>19360610</td>
-        </tr><tr>
-            <td>종로구</td>
             <td>종로구 창신동 580-16</td>
             <td></td>
             <td>제2종근린생활시설</td>
             <td>46.28</td>
+            <td>1</td>
+            <td>19360610</td>
+        </tr><tr>
+            <td>종로구</td>
+            <td>종로구 창신동 340-10</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>23.14</td>
             <td>1</td>
             <td>19360610</td>
         </tr><tr>
@@ -1240,6 +1816,22 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>39.67</td>
             <td>1</td>
             <td>19360619</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로2가 37</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>370.25</td>
+            <td>2</td>
+            <td>19360622</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로1가 133-1</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>1</td>
+            <td>19360701</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 남대문로1가 28</td>
@@ -1264,6 +1856,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>512.7</td>
             <td>2</td>
             <td>19360804</td>
+        </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 대현동 37-59</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>23.14</td>
+            <td>1</td>
+            <td>19360915</td>
         </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 395-23</td>
@@ -1321,11 +1921,19 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19361103</td>
         </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 281-1</td>
+            <td>용산구</td>
+            <td>용산구 원효로1가 121-77</td>
             <td></td>
-            <td>제2종근린생활시설</td>
-            <td>33.06</td>
+            <td>제1종근린생활시설</td>
+            <td>60.33</td>
+            <td>2</td>
+            <td>19361105</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 247-24</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>23.14</td>
             <td>1</td>
             <td>19361117</td>
         </tr><tr>
@@ -1338,10 +1946,18 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19361117</td>
         </tr><tr>
             <td>중구</td>
-            <td>중구 신당동 281-5</td>
+            <td>중구 신당동 248-33</td>
             <td></td>
             <td>제1종근린생활시설</td>
-            <td>21.85</td>
+            <td>99.17</td>
+            <td>2</td>
+            <td>19361117</td>
+        </tr><tr>
+            <td>중구</td>
+            <td>중구 신당동 281-1</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>33.06</td>
             <td>1</td>
             <td>19361117</td>
         </tr><tr>
@@ -1354,19 +1970,11 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19361117</td>
         </tr><tr>
             <td>중구</td>
-            <td>중구 신당동 247-24</td>
+            <td>중구 신당동 281-5</td>
             <td></td>
             <td>제1종근린생활시설</td>
-            <td>23.14</td>
+            <td>21.85</td>
             <td>1</td>
-            <td>19361117</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 248-33</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>99.17</td>
-            <td>2</td>
             <td>19361117</td>
         </tr><tr>
             <td>종로구</td>
@@ -1378,7 +1986,7 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19361130</td>
         </tr><tr>
             <td>중구</td>
-            <td>중구 을지로4가 156-8</td>
+            <td>중구 을지로4가 155</td>
             <td></td>
             <td>제2종근린생활시설</td>
             <td>168.59</td>
@@ -1386,7 +1994,7 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>19361215</td>
         </tr><tr>
             <td>중구</td>
-            <td>중구 을지로4가 155</td>
+            <td>중구 을지로4가 156-8</td>
             <td></td>
             <td>제2종근린생활시설</td>
             <td>168.59</td>
@@ -1473,6 +2081,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>2</td>
             <td>19370113</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 용문동 8-166</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>2</td>
+            <td>19370211</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 330-39</td>
             <td></td>
@@ -1481,6 +2097,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19370320</td>
         </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 휘경동 319-17</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>56.2</td>
+            <td>1</td>
+            <td>19370405</td>
+        </tr><tr>
             <td>성동구</td>
             <td>성동구 응봉동 154</td>
             <td></td>
@@ -1488,6 +2112,86 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>36.36</td>
             <td>1</td>
             <td>19370406</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 휘경동 320</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>52.89</td>
+            <td>1</td>
+            <td>19370406</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 한남동 203</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>21.32</td>
+            <td>1</td>
+            <td>19370407</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 한남동 249</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>1</td>
+            <td>19370407</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 용두동 711-14</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>56.2</td>
+            <td>1</td>
+            <td>19370409</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 제기동 137-39</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>33.05</td>
+            <td>1</td>
+            <td>19370409</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 용두동 135</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>59.5</td>
+            <td>1</td>
+            <td>19370409</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 용두동 223</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>19.83</td>
+            <td>1</td>
+            <td>19370409</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 용두동 225</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>56.2</td>
+            <td>1</td>
+            <td>19370409</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 남영동 27-2</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>571.91</td>
+            <td>2</td>
+            <td>19370410</td>
+        </tr><tr>
+            <td>동대문구</td>
+            <td>동대문구 용두동 689</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>19.83</td>
+            <td>1</td>
+            <td>19370410</td>
         </tr><tr>
             <td>성동구</td>
             <td>성동구 마장동 443-22</td>
@@ -1585,6 +2289,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19370603</td>
         </tr><tr>
+            <td>서대문구</td>
+            <td>서대문구 옥천동 66</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>93.51</td>
+            <td>1</td>
+            <td>19370610</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 을지로4가 124</td>
             <td></td>
@@ -1601,6 +2313,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19370710</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 238-4</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>13.44</td>
+            <td>1</td>
+            <td>19370730</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 효제동 297</td>
             <td></td>
@@ -1608,6 +2328,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>24.33</td>
             <td>1</td>
             <td>19370820</td>
+        </tr><tr>
+            <td>성북구</td>
+            <td>성북구 정릉동 150-23</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>32.72</td>
+            <td>1</td>
+            <td>19370829</td>
         </tr><tr>
             <td>광진구</td>
             <td>광진구 자양동 60</td>
@@ -1632,6 +2360,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>42.98</td>
             <td>1</td>
             <td>19370909</td>
+        </tr><tr>
+            <td>용산구</td>
+            <td>용산구 원효로3가 257</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>49.59</td>
+            <td>1</td>
+            <td>19370910</td>
         </tr><tr>
             <td>중구</td>
             <td>중구 주교동 287-1</td>
@@ -1673,6 +2409,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>3</td>
             <td>19371030</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 문배동 11-23</td>
+            <td></td>
+            <td>제2종근린생활시설</td>
+            <td>141.03</td>
+            <td>1</td>
+            <td>19371031</td>
+        </tr><tr>
             <td>중구</td>
             <td>중구 쌍림동 239</td>
             <td></td>
@@ -1697,6 +2441,14 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>1</td>
             <td>19371105</td>
         </tr><tr>
+            <td>용산구</td>
+            <td>용산구 서계동 242-15</td>
+            <td></td>
+            <td>제1종근린생활시설</td>
+            <td>26.45</td>
+            <td>1</td>
+            <td>19371106</td>
+        </tr><tr>
             <td>종로구</td>
             <td>종로구 창신동 582-1</td>
             <td></td>
@@ -1712,767 +2464,15 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
             <td>29.75</td>
             <td>1</td>
             <td>19371115</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로4가 187-15</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>82.64</td>
-            <td>2</td>
-            <td>19380111</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 봉래동2가 1</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>264.46</td>
-            <td>2</td>
-            <td>19380115</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 만리동1가 22-5</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>112.4</td>
-            <td>2</td>
-            <td>19380502</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 광희동1가 154-4</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>33.06</td>
-            <td>1</td>
-            <td>19380619</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 321-8</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>825.83</td>
-            <td>3</td>
-            <td>19380701</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 숭인동 72-133</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>19.83</td>
-            <td>1</td>
-            <td>19380720</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 회현동1가 99-6</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>1041.33</td>
-            <td>0</td>
-            <td>19380829</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로4가 104-1</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>210.46</td>
-            <td>2</td>
-            <td>19380830</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로5가 7-3</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>341.89</td>
-            <td>2</td>
-            <td>19380910</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로4가 169-15</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>238.79</td>
-            <td>2</td>
-            <td>19380915</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동4가 37-13</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>66.27</td>
-            <td>1</td>
-            <td>19380927</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창성동 98-7</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>89.45</td>
-            <td>1</td>
-            <td>19381012</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 당산동1가 256-126</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>26.45</td>
-            <td>1</td>
-            <td>19381031</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 395-5</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>39.67</td>
-            <td>1</td>
-            <td>19381220</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로7가 11-4</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>326.08</td>
-            <td>2</td>
-            <td>19390100</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 주교동 264</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>277.69</td>
-            <td>1</td>
-            <td>19390128</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 남산동2가 14-5</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>89.25</td>
-            <td>2</td>
-            <td>19390215</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 충무로3가 35</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>195.04</td>
-            <td>2</td>
-            <td>19390325</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로3가 222</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>112.4</td>
-            <td>2</td>
-            <td>19390510</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 마장동 450-36</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>19.83</td>
-            <td>1</td>
-            <td>19390530</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 387-2</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>42.98</td>
-            <td>1</td>
-            <td>19390710</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 회현동2가 78</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>862.81</td>
-            <td>2</td>
-            <td>19390826</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 명동1가 59-2</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>1190.08</td>
-            <td>2</td>
-            <td>19390831</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 숭인동 313-6</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>36.36</td>
-            <td>1</td>
-            <td>19391030</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 황학동 1901</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>42.98</td>
-            <td>1</td>
-            <td>19391111</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 329-5</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>49.59</td>
-            <td>1</td>
-            <td>19391120</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 당산동4가 4-18</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>142.15</td>
-            <td>2</td>
-            <td>19400112</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 쌍림동 22-25</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>49.59</td>
-            <td>1</td>
-            <td>19400301</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 충신동 105-1</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>66.12</td>
-            <td>2</td>
-            <td>19400305</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 성수동1가 294</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>112.79</td>
-            <td>1</td>
-            <td>19400329</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 회현동2가 33</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>406.61</td>
-            <td>2</td>
-            <td>19400401</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 팔판동 64</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>42.98</td>
-            <td>1</td>
-            <td>19400408</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 세종로 210</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>44.63</td>
-            <td>1</td>
-            <td>19400504</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 팔판동 63</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>33.06</td>
-            <td>1</td>
-            <td>19400506</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 광희동1가 85-1</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>185.14</td>
-            <td>2</td>
-            <td>19400510</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 숭인동 61-99</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>26.45</td>
-            <td>1</td>
-            <td>19400514</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 주교동 203-1</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>102.48</td>
-            <td>2</td>
-            <td>19400530</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 주교동 206-1</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>83.73</td>
-            <td>2</td>
-            <td>19400530</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 화동 117</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>148.27</td>
-            <td>3</td>
-            <td>19400605</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 395-34</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>36.36</td>
-            <td>1</td>
-            <td>19400610</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 395-31</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>36.36</td>
-            <td>1</td>
-            <td>19400610</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 쌍림동 22-18</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>46.28</td>
-            <td>1</td>
-            <td>19400615</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 영등포동2가 34-124</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>42.98</td>
-            <td>1</td>
-            <td>19400713</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동1가 63-6</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>39.67</td>
-            <td>1</td>
-            <td>19400726</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 황학동 1156</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>46.28</td>
-            <td>1</td>
-            <td>19400815</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 명동2가 91</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>383.47</td>
-            <td>2</td>
-            <td>19400816</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 쌍림동 258</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>145.45</td>
-            <td>2</td>
-            <td>19400820</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 상왕십리동 127</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>135.54</td>
-            <td>1</td>
-            <td>19400915</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 주교동 165</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>59.51</td>
-            <td>2</td>
-            <td>19400915</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 행당동 144</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>39.67</td>
-            <td>1</td>
-            <td>19401001</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 395-32</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>36.36</td>
-            <td>1</td>
-            <td>19401020</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 쌍림동 182-2</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>118.45</td>
-            <td>2</td>
-            <td>19401023</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 광희동2가 20</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>168.59</td>
-            <td>2</td>
-            <td>19401110</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 당산동1가 18-2</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>82.65</td>
-            <td>1</td>
-            <td>19401111</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 251-95</td>
-            <td>]</td>
-            <td>제2종근린생활시설</td>
-            <td>238.02</td>
-            <td>1</td>
-            <td>19401120</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 명동1가 30-2</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>271.07</td>
-            <td>2</td>
-            <td>19401212</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 주자동 17</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>76.04</td>
-            <td>2</td>
-            <td>19401213</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 팔판동 90</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>39.67</td>
-            <td>1</td>
-            <td>19410118</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 산림동 282</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>122.31</td>
-            <td>2</td>
-            <td>19410210</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창성동 138-1</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>89.26</td>
-            <td>1</td>
-            <td>19410320</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 당산동1가 253</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>29.75</td>
-            <td>1</td>
-            <td>19410326</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 팔판동 16-2</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>45.1</td>
-            <td>2</td>
-            <td>19410424</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동4가 33-5</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>65.12</td>
-            <td>1</td>
-            <td>19410531</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 을지로6가 18-1</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>42.98</td>
-            <td>1</td>
-            <td>19410601</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 산림동 287</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>72.72</td>
-            <td>2</td>
-            <td>19410610</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 마장동 460-17</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>35.11</td>
-            <td>1</td>
-            <td>19410701</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 소공동 112-41</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>72.07</td>
-            <td>1</td>
-            <td>19410706</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 233-55</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>11.57</td>
-            <td>1</td>
-            <td>19410810</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 영등포동3가 12-9</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>26.45</td>
-            <td>1</td>
-            <td>19410823</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 숭인동 178-6</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>46.28</td>
-            <td>1</td>
-            <td>19410912</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동4가 35-10</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>40.44</td>
-            <td>1</td>
-            <td>19411010</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 숭인동 1241</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>33.06</td>
-            <td>2</td>
-            <td>19411016</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 신영동 36</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>49.59</td>
-            <td>1</td>
-            <td>19411125</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창성동 94-19</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>33.06</td>
-            <td>1</td>
-            <td>19411202</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 다동 62</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>357.03</td>
-            <td>2</td>
-            <td>19411205</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 광희동1가 76-1</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>159.36</td>
-            <td>3</td>
-            <td>19411224</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동3가 29-10</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>38.02</td>
-            <td>1</td>
-            <td>19420118</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동3가 29-9</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>39.67</td>
-            <td>1</td>
-            <td>19420118</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동3가 29-8</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>35.07</td>
-            <td>1</td>
-            <td>19420118</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동3가 29-3</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>51.21</td>
-            <td>1</td>
-            <td>19420118</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동3가 29-5</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>29.29</td>
-            <td>1</td>
-            <td>19420118</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동3가 29-2</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>46.94</td>
-            <td>1</td>
-            <td>19420118</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 옥수동 296</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>52.89</td>
-            <td>1</td>
-            <td>19420501</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 성수동2가 344-2</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>100.33</td>
-            <td>1</td>
-            <td>19420503</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 하왕십리동 643</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>1.59</td>
-            <td>1</td>
-            <td>19420508</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 459-28</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>21.42</td>
-            <td>1</td>
-            <td>19420522</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 저동1가 79-5</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>79.14</td>
-            <td>2</td>
-            <td>19420730</td>
-        </tr><tr>
-            <td>영등포구</td>
-            <td>영등포구 문래동4가 17-12</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>47.11</td>
-            <td>1</td>
-            <td>19420801</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 광희동1가 115</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>23.14</td>
-            <td>1</td>
-            <td>19420805</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 신당동 110</td>
-            <td></td>
-            <td>제1종근린생활시설</td>
-            <td>198.35</td>
-            <td>1</td>
-            <td>19420815</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 장사동 115</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>43.63</td>
-            <td>1</td>
-            <td>19420815</td>
-        </tr><tr>
-            <td>중구</td>
-            <td>중구 충정로1가 65</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>42.98</td>
-            <td>2</td>
-            <td>19420820</td>
-        </tr><tr>
-            <td>성동구</td>
-            <td>성동구 상왕십리동 16-12</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>46.28</td>
-            <td>1</td>
-            <td>19420901</td>
-        </tr><tr>
-            <td>종로구</td>
-            <td>종로구 창신동 323-1</td>
-            <td></td>
-            <td>제2종근린생활시설</td>
-            <td>119.94</td>
-            <td>2</td>
-            <td>19420910</td>
         </tr></tbody>
     </table>
   </div>
 </div>
 
 <div class="note">
-※ 방법론: 건축HUB "원하는대로 건축데이터"로 8개구 건축물대장 표제부 전체를
-다운로드해 주용도가 제1·2종근린생활시설·판매시설인 49,234건만 남김. 같은 8개구를 소상공인 상가정보 API(storeListInDong)로
-누락 없이 전수 스캔(61,409건 지번)해, 상업용 건물 중 실제 영업중 사업체가 하나도 매칭되지 않는 지번을 공실 후보로 추출.<br>
+※ 방법론: 건축HUB "원하는대로 건축데이터"로 서울 25개구 건축물대장 표제부 전체를
+다운로드해 주용도가 제1·2종근린생활시설·판매시설인 116,571건만 남김. 같은 25개구를 소상공인 상가정보 API(storeListInDong)로
+누락 없이 전수 스캔(160,419건 지번)해, 상업용 건물 중 실제 영업중 사업체가 하나도 매칭되지 않는 지번을 공실 후보로 추출.<br>
 전체 후보 목록은 cvs/vacancy_candidates.csv에 저장. 도로명코드가 없는 지번 기반 데이터라 전기/가스 에너지 사용량과는 아직 연결되지
 않았으며, 상위 후보를 건축HUB API로 개별 조회해 새주소 코드를 붙이는 것이 다음 단계다.
 </div>

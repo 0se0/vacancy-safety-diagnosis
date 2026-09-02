@@ -1,15 +1,21 @@
 """
 commercial_vacancy_screening.py
 
-8개구 전체 규모로 "건축물대장(상업용도) - 상가정보(실제영업중)" 차집합을 구해서
+서울 25개구 전체 규모로 "건축물대장(상업용도) - 상가정보(실제영업중)" 차집합을 구해서
 공실 후보 주소를 스크리닝한다. verification_scan.py가 303건 표본으로 했던
-"등록 전유부수 vs 실제 영업중수" 비교를, 상업용 건물 5만여건 규모로 확장한 버전.
+"등록 전유부수 vs 실제 영업중수" 비교를, 상업용 건물 규모로 확장한 버전.
+
+★ 2026-09-01에는 8개구(강남·마포·광진·종로·중구·영등포·성동·강북)만 있었음
+  (건축물대장 벌크 데이터가 8개구치만 있었어서). 2026-09-02에 나머지 17개구
+  건축물대장(cvs2/건축물대장_표제부_17개구_전체.csv)을 추가로 받아 25개구
+  전체로 확장. 건물대장은 파일 2개(8개구/17개구)를 합쳐서 쓰고, 상가정보 API
+  스캔은 seoul_districts.py의 25개구 전체로 돈다.
 
 건축HUB "원하는대로 건축데이터"에서 받은 벌크 표제부는 지번(시군구/법정동/번/지)
 기반이라 도로명코드가 없다 -> energy_vacancy_indicator.py가 쓰는 에너지 데이터와는
 바로 못 붙는다(에너지 데이터는 도로명코드만 있음). 그래서 이 스크립트의 결과물은
 "공실 후보 주소 리스트"까지이며, 에너지 사용량 연결은 이 후보 중 일부를 건축HUB
-API로 개별 조회해 새주소 코드를 붙이는 후속 작업으로 남긴다.
+API로 개별 조회해 새주소 코드를 붙이는 후속 작업으로 남긴다(link_candidates_to_energy.py).
 
 주의: 상가정보 API는 "현재 영업 중인 사업체"만 반환한다. 건축물대장에는 공동/단독
 주택 등 애초에 상가가 아닌 건물도 다수 포함돼 있어서, 필터링 없이 그냥 차집합을
@@ -18,11 +24,11 @@ API로 개별 조회해 새주소 코드를 붙이는 후속 작업으로 남긴
 
 돌리는 법:
   1. .env에 SANGGA_API_KEY 필요 (verification_scan.py와 동일 키)
-  2. cvs2/건축물대장_표제부_8개구_전체.csv 필요
-     (건축HUB "원하는대로 건축데이터"에서 8개구 지역 선택, 건축물대장/표제부,
-      CSV로 다운받아 이 이름으로 저장)
+  2. cvs2/건축물대장_표제부_8개구_전체.csv, cvs2/건축물대장_표제부_17개구_전체.csv
+     둘 다 필요 (건축HUB "원하는대로 건축데이터"에서 지역 선택, 건축물대장/표제부,
+     CSV로 다운받아 이 이름으로 저장 - 한 번에 다 안 받아지면 나눠 받아도 됨)
   3. python commercial_vacancy_screening.py 실행
-     (8개구 상가 전체 스캔이라 API 호출 ~224회, 몇 분 걸림)
+     (25개구 상가 전체 스캔이라 몇 분~10분 넘게 걸릴 수 있음)
   4. 결과: cvs/vacancy_candidates.csv (전체 후보) +
            html/역산공실탐지기반_공실후보스크리닝.html
 """
@@ -35,6 +41,8 @@ import pandas as pd
 import requests
 from dotenv import load_dotenv
 
+from seoul_districts import SEOUL_GU_CODES
+
 load_dotenv()
 
 SERVICE_KEY_SANGGA = os.environ.get("SANGGA_API_KEY", "")
@@ -44,13 +52,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CVS_DIR = os.path.join(BASE_DIR, "cvs")
 CVS2_DIR = os.path.join(BASE_DIR, "cvs2")
 HTML_DIR = os.path.join(BASE_DIR, "html")
-LEDGER_PATH = os.path.join(CVS2_DIR, "건축물대장_표제부_8개구_전체.csv")
+LEDGER_PATHS = [
+    os.path.join(CVS2_DIR, "건축물대장_표제부_8개구_전체.csv"),
+    os.path.join(CVS2_DIR, "건축물대장_표제부_17개구_전체.csv"),
+]
 
-# energy_vacancy_indicator.py / verification_scan.py와 동일한 8개구
-SCAN_SIGUNGU_CODES = {
-    "11680": "강남구", "11440": "마포구", "11215": "광진구", "11110": "종로구",
-    "11140": "중구", "11560": "영등포구", "11200": "성동구", "11305": "강북구",
-}
+# 서울 25개구 전체 (seoul_districts.py) - 2026-09-01엔 이 중 8개구만 스캔했었음
+SCAN_SIGUNGU_CODES = SEOUL_GU_CODES
 NUM_ROWS_PER_PAGE = 1000
 REQUEST_TIMEOUT = 20
 MAX_RETRY = 2
@@ -101,7 +109,7 @@ def scan_all_stores(signgu_cd: str) -> list:
 
 def collect_active_jibun_set() -> dict:
     """
-    8개구 전체 상가를 무제한 스캔해서 (구명,동명,번,지) 지번 키 -> 실제영업중 점포수로 집계.
+    SCAN_SIGUNGU_CODES 전체 상가를 무제한 스캔해서 (구명,동명,번,지) 지번 키 -> 실제영업중 점포수로 집계.
     """
     active = defaultdict(int)
     for signgu_cd, gu_name in SCAN_SIGUNGU_CODES.items():
@@ -126,10 +134,18 @@ def collect_active_jibun_set() -> dict:
 
 
 def load_commercial_ledger() -> pd.DataFrame:
-    """건축물대장 8개구 벌크를 로드해 상업용도(근린생활시설/판매시설)만 남긴다."""
+    """건축물대장 벌크(8개구+17개구, 있는 파일만) 로드해 상업용도만 남긴다."""
     usecols = ["시군구", "법정동", "번", "지", "건물명", "주용도", "연면적(㎡)",
                "지상층수", "사용승인일"]
-    df = pd.read_csv(LEDGER_PATH, encoding="utf-8-sig", dtype=str, usecols=usecols)
+    frames = []
+    for path in LEDGER_PATHS:
+        if not os.path.exists(path):
+            print(f"  ⚠️ {path} 없음, 스킵")
+            continue
+        frames.append(pd.read_csv(path, encoding="utf-8-sig", dtype=str, usecols=usecols))
+    if not frames:
+        raise FileNotFoundError(f"건축물대장 벌크 파일이 하나도 없습니다: {LEDGER_PATHS}")
+    df = pd.concat(frames, ignore_index=True)
     df = df[df["주용도"].isin(COMMERCIAL_USES)].copy()
     df["번"] = pd.to_numeric(df["번"], errors="coerce")
     df["지"] = pd.to_numeric(df["지"], errors="coerce").fillna(0)
@@ -196,7 +212,7 @@ def generate(candidates: list, ledger_total: int, active_total: int) -> str:
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>역산공실탐지기반 — 공실 후보 스크리닝 (8개구 상업용도 전수조사)</title>
+<title>역산공실탐지기반 — 공실 후보 스크리닝 (서울 25개구 상업용도 전수조사)</title>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f7; color: #0b0b0b; padding: 2rem; }}
@@ -219,27 +235,27 @@ def generate(candidates: list, ledger_total: int, active_total: int) -> str:
 </style>
 </head>
 <body>
-<h1>역산공실탐지기반 — 공실 후보 스크리닝 (8개구 상업용도 전수조사)</h1>
+<h1>역산공실탐지기반 — 공실 후보 스크리닝 (서울 25개구 상업용도 전수조사)</h1>
 <div class="subtitle">건축물대장(근린생활시설·판매시설) {ledger_total:,}건 vs 상가정보 API 실제영업중 {active_total:,}건 차집합</div>
 
 <div class="caveat">
 📍 <b>이 지표의 배경:</b> 건축물대장에서 주용도가 근린생활시설(1종/2종)·판매시설인 상업용 건물만 걸러낸 뒤,
 같은 지번(시군구·법정동·번·지)에 상가정보 API 실측 결과 영업 중인 사업체가 하나도 없는 건물을 공실 후보로 추출했다.<br>
-verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 8개구 상업용 건물 전체({ledger_total:,}건) 규모로 확장한 버전이다.<br>
+verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 서울 25개구 상업용 건물 전체({ledger_total:,}건) 규모로 확장한 버전이다.<br>
 ⚠️ 상가정보 API에 누락된 최근 개업 업체, 지번-법정동명 표기 차이로 인한 미스매치 등으로 인한 오탐이 섞여 있을 수 있어
 "확정 공실"이 아니라 "현장 확인이 필요한 후보"로 해석해야 한다.
 </div>
 
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-label">상업용 건물 (8개구 전체)</div>
+    <div class="kpi-label">상업용 건물 (서울 25개구 전체)</div>
     <div class="kpi-value gray">{ledger_total:,}</div>
     <div class="kpi-sub">근린생활시설·판매시설</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">실제 영업중 지번(상가정보 API)</div>
     <div class="kpi-value gray">{active_total:,}</div>
-    <div class="kpi-sub">8개구 전수 스캔</div>
+    <div class="kpi-sub">25개구 전수 스캔</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">공실 후보</div>
@@ -263,8 +279,8 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
 </div>
 
 <div class="note">
-※ 방법론: 건축HUB "원하는대로 건축데이터"로 8개구 건축물대장 표제부 전체를
-다운로드해 주용도가 제1·2종근린생활시설·판매시설인 {ledger_total:,}건만 남김. 같은 8개구를 소상공인 상가정보 API(storeListInDong)로
+※ 방법론: 건축HUB "원하는대로 건축데이터"로 서울 25개구 건축물대장 표제부 전체를
+다운로드해 주용도가 제1·2종근린생활시설·판매시설인 {ledger_total:,}건만 남김. 같은 25개구를 소상공인 상가정보 API(storeListInDong)로
 누락 없이 전수 스캔({active_total:,}건 지번)해, 상업용 건물 중 실제 영업중 사업체가 하나도 매칭되지 않는 지번을 공실 후보로 추출.<br>
 전체 후보 목록은 cvs/vacancy_candidates.csv에 저장. 도로명코드가 없는 지번 기반 데이터라 전기/가스 에너지 사용량과는 아직 연결되지
 않았으며, 상위 후보를 건축HUB API로 개별 조회해 새주소 코드를 붙이는 것이 다음 단계다.
@@ -275,7 +291,7 @@ verification_scan.py가 303건 표본으로 했던 "등록 vs 실제" 비교를 
 
 
 if __name__ == "__main__":
-    print("=== 1단계: 상가정보 API 8개구 전체 스캔 (누락 없이) ===")
+    print("=== 1단계: 상가정보 API 서울 25개구 전체 스캔 (누락 없이) ===")
     active = collect_active_jibun_set()
     print(f"\n실제 영업중 지번 {len(active):,}건 식별 완료\n")
 

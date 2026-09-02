@@ -34,11 +34,11 @@ import time
 from dotenv import load_dotenv
 
 from enrich_building_age import (
-    SIGUNGU_NAME_TO_CODE,
     get_building_title,
     load_bjdong_table,
 )
 from energy_vacancy_indicator import load_energy_usage
+from seoul_districts import SEOUL_GU_CODES, SEOUL_GU_NAME_TO_CODE
 
 load_dotenv()
 
@@ -105,7 +105,7 @@ def enrich_with_road_code(candidates: list, bjdong_table: dict) -> list:
         for i, c in enumerate(candidates, 1):
             gu = c["gu"]
             dong = c["dong"]
-            sigungu_cd = SIGUNGU_NAME_TO_CODE.get(gu)
+            sigungu_cd = SEOUL_GU_NAME_TO_CODE.get(gu)
             bjdong_cd = bjdong_table.get((gu, dong))
             if not sigungu_cd or not bjdong_cd:
                 no_bjdong += 1
@@ -309,7 +309,7 @@ if __name__ == "__main__":
     total_tried = len(all_candidates)
     print(f"누적 새주소코드 확보: {len(all_enriched)}건 (전체 후보 {total_tried}건 중)")
 
-    usage = load_energy_usage()
+    usage = load_energy_usage(signgu_codes=SEOUL_GU_CODES.keys())
     matched = join_energy(all_enriched, usage)
     print(f"\n누적 공실 후보 중 에너지 사용 흔적 있는 건물: {len(matched)}/{len(all_enriched)}건")
 

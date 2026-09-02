@@ -163,7 +163,7 @@ def load_energy_usage(signgu_codes=None) -> dict:
             for (rd_cd, bbno, buno), qy in grouped.items():
                 key = (str(rd_cd), int(bbno), int(buno))
                 usage[key][fuel][month] = float(qy)
-            print(f"  [{fuel}] {i}/{len(files)} {fname} -> 8개구 {len(grouped)}건 건물 집계")
+            print(f"  [{fuel}] {i}/{len(files)} {fname} -> {len(target_signgu)}개구 {len(grouped)}건 건물 집계")
     return dict(usage)
 
 

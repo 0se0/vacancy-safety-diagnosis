@@ -243,6 +243,9 @@ def main():
             stor_co=lambda d: d['stor_co'].round(1)).to_dict('records'),
         "by_induty": [{"name": k, "value": round(float(v) * 100, 1)} for k, v in by_induty.items()],
         "latest_quarter": int(full['stdr_yyqu_cd'].max()),
+        # 상권x업종 전체(top10이 아니라)의 최신분기 예측치 - district_closure_validation.py처럼
+        # 구 단위로 집계해서 다른 지표와 교차검증할 때 씀. write_html()은 이 키를 안 씀.
+        "latest_full": latest[['trdar_cd', 'trdar_cd_nm', 'svc_induty_cd', 'svc_induty_cd_nm', 'risk_proba']].copy(),
     }
     write_html(result)
     return result

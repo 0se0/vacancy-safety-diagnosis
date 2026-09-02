@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 14945건 표본)</title>
+<title>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 33135건 표본)</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f7; color: #0b0b0b; padding: 2rem; }
@@ -25,11 +25,11 @@
 </style>
 </head>
 <body>
-<h1>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 14945건 표본)</h1>
-<div class="subtitle">공실 후보 14,945건 중 사용승인일 오래된 순 상위 14945건 표본 조회</div>
+<h1>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 33135건 표본)</h1>
+<div class="subtitle">공실 후보 14,945건 중 사용승인일 오래된 순 상위 33135건 표본 조회</div>
 
 <div class="caveat">
-📍 공실 후보는 지번 기반이라 도로명코드가 없어, 건축HUB API(getBrTitleInfo)로 상위 14945건을 개별
+📍 공실 후보는 지번 기반이라 도로명코드가 없어, 건축HUB API(getBrTitleInfo)로 상위 33135건을 개별
 조회해 새주소도로코드를 확보한 뒤 전기/가스 에너지 사용량과 조인했다. API 호출량·일일 한도 제약으로 전체
 14,945건이 아닌 표본만 우선 처리했으며, 일부 건물은 새주소 자체가 등록돼 있지 않아 매칭이 원천적으로
 불가능하다.
@@ -38,17 +38,17 @@
 <div class="kpi-grid">
   <div class="kpi-card">
     <div class="kpi-label">조회 시도</div>
-    <div class="kpi-value gray">14,945건</div>
+    <div class="kpi-value gray">33,135건</div>
     <div class="kpi-sub">공실 후보 14,945건 중 표본</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">새주소코드 확보</div>
-    <div class="kpi-value gray">13,362건</div>
-    <div class="kpi-sub">89.4%</div>
+    <div class="kpi-value gray">16,354건</div>
+    <div class="kpi-sub">49.4%</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">에너지 사용량 확인</div>
-    <div class="kpi-value red">11,289건</div>
+    <div class="kpi-value red">13,541건</div>
     <div class="kpi-sub">공실 후보인데 에너지 사용 흔적 있음</div>
   </div>
 </div>
