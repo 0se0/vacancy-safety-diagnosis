@@ -130,12 +130,14 @@ def collect_buildings() -> dict:
     return dict(buildings)
 
 
-def load_energy_usage() -> dict:
+def load_energy_usage(signgu_codes=None) -> dict:
     """
-    cvs2/전기에너지, cvs2/가스에너지 24개월치를 스캔 대상 8개구로 필터링해서
+    cvs2/전기에너지, cvs2/가스에너지 24개월치를 대상 구로 필터링해서
     건물별(도로명코드,본번,부번) -> {'elec': {월: 사용량}, 'gas': {월: 사용량}}로 집계.
+    signgu_codes를 안 주면 기본 8개구(SCAN_SIGUNGU_CODES) 기준(기존 호출부 호환).
+    market_energy_matching.py처럼 다른 구를 볼 때는 signgu_codes로 넘겨서 재사용.
     """
-    target_signgu = set(SCAN_SIGUNGU_CODES.keys())
+    target_signgu = set(signgu_codes) if signgu_codes is not None else set(SCAN_SIGUNGU_CODES.keys())
     usage = defaultdict(lambda: {"elec": {}, "gas": {}})
 
     for fuel, folder, prefix, unit in ENERGY_SOURCES:
