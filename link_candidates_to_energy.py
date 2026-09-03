@@ -1,14 +1,14 @@
 """
 link_candidates_to_energy.py
 
-commercial_vacancy_screening.py가 뽑은 공실 후보(14,945건)는 지번 기반이라
-도로명코드가 없어 에너지 데이터와 못 붙었다. 이 스크립트는 상위 N건(오래된
-건물 우선 - 이미 vacancy_candidates.csv가 사용승인일 순 정렬돼 있음)을
+commercial_vacancy_screening.py가 뽑은 공실 후보(서울 25개구 전체, 33,135건)는
+지번 기반이라 도로명코드가 없어 에너지 데이터와 못 붙었다. 이 스크립트는 전체
+후보(오래된 건물 우선 - 이미 vacancy_candidates.csv가 사용승인일 순 정렬돼 있음)를
 건축HUB getBrTitleInfo API로 개별 조회해서 새주소도로코드(naRoadCd)를 얻고,
 energy_vacancy_indicator.py가 이미 만들어둔 에너지 사용량 로더로 조인한다.
 
-★ 14,945건 전체를 한 번에 돌리지 않는 이유: 건당 API 호출이 필요해서 전체를
-  돌리면 2~3시간 걸리고, 공공데이터포털 API 일일 호출한도(실측: 약 1만 건/일에서
+★ 전체를 한 번에 돌리지 않는 이유: 건당 API 호출이 필요해서 전체를
+  돌리면 여러 시간 걸리고, 공공데이터포털 API 일일 호출한도(실측: 약 1만 건/일에서
   HTTP 429 "LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR" 발생)를 초과할 수
   있음. 그래서 매 실행마다 "아직 해결 안 된" 후보만 골라 처리하고, 연속 API 실패가
   일정 횟수 이상 반복되면(=쿼터 초과로 추정) 즉시 멈춰서 남은 호출을 낭비하지 않는다.
@@ -222,7 +222,7 @@ def generate(matched: list, n_candidates_tried: int, n_with_road_code: int) -> s
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 {n_candidates_tried}건 표본)</title>
+<title>역산공실탐지기반 — 공실 후보 에너지 연결 (전체 {n_candidates_tried:,}건 중 진행)</title>
 <style>
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
   body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f7; color: #0b0b0b; padding: 2rem; }}
@@ -244,21 +244,21 @@ def generate(matched: list, n_candidates_tried: int, n_with_road_code: int) -> s
 </style>
 </head>
 <body>
-<h1>역산공실탐지기반 — 공실 후보 에너지 연결 (상위 {n_candidates_tried}건 표본)</h1>
-<div class="subtitle">공실 후보 14,945건 중 사용승인일 오래된 순 상위 {n_candidates_tried}건 표본 조회</div>
+<h1>역산공실탐지기반 — 공실 후보 에너지 연결 (전체 {n_candidates_tried:,}건 중 진행)</h1>
+<div class="subtitle">서울 25개구 공실 후보 {n_candidates_tried:,}건 전체를 사용승인일 오래된 순으로 순차 조회 중 (일일 API 쿼터 제한으로 여러 회차에 걸쳐 진행)</div>
 
 <div class="caveat">
-📍 공실 후보는 지번 기반이라 도로명코드가 없어, 건축HUB API(getBrTitleInfo)로 상위 {n_candidates_tried}건을 개별
-조회해 새주소도로코드를 확보한 뒤 전기/가스 에너지 사용량과 조인했다. API 호출량·일일 한도 제약으로 전체
-14,945건이 아닌 표본만 우선 처리했으며, 일부 건물은 새주소 자체가 등록돼 있지 않아 매칭이 원천적으로
-불가능하다.
+📍 공실 후보는 지번 기반이라 도로명코드가 없어, 건축HUB API(getBrTitleInfo)로 개별
+조회해 새주소도로코드를 확보한 뒤 전기/가스 에너지 사용량과 조인했다. API 일일 호출한도 제약으로 전체
+{n_candidates_tried:,}건을 한 번에 끝내지 못하고 쿼터가 풀릴 때마다 이어서 처리 중이며, 일부 건물은 새주소 자체가
+등록돼 있지 않아 매칭이 원천적으로 불가능하다.
 </div>
 
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-label">조회 시도</div>
+    <div class="kpi-label">공실 후보 전체</div>
     <div class="kpi-value gray">{n_candidates_tried:,}건</div>
-    <div class="kpi-sub">공실 후보 14,945건 중 표본</div>
+    <div class="kpi-sub">서울 25개구 전수조사 기준</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">새주소코드 확보</div>
