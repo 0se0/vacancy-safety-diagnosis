@@ -9,9 +9,13 @@ energy_vacancy_indicator.py가 이미 만들어둔 에너지 사용량 로더로
 
 ★ 전체를 한 번에 돌리지 않는 이유: 건당 API 호출이 필요해서 전체를
   돌리면 여러 시간 걸리고, 공공데이터포털 API 일일 호출한도(실측: 약 1만 건/일에서
-  HTTP 429 "LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR" 발생)를 초과할 수
-  있음. 그래서 매 실행마다 "아직 해결 안 된" 후보만 골라 처리하고, 연속 API 실패가
-  일정 횟수 이상 반복되면(=쿼터 초과로 추정) 즉시 멈춰서 남은 호출을 낭비하지 않는다.
+  호출한도 초과 에러 LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR 발생)를
+  초과할 수 있음. 그래서 매 실행마다 "아직 해결 안 된" 후보만 골라 처리하고,
+  "조회 자체가 실패(네트워크/HTTP 429·5xx/포털 호출한도 에러)"가 연속으로 일정
+  횟수 이상 반복되면 쿼터 소진 또는 API 장애로 보고 즉시 멈춰서 남은 호출을 낭비하지
+  않는다. get_building_title()이 "정상 응답이지만 해당 지번 없음"(-> 영구실패로 기록,
+  실패 스트릭 리셋)과 "조회 실패"(-> API_FAILURE, 스트릭 누적)를 구분해 주므로,
+  건축HUB에 없는 지번이 우연히 여러 건 연속돼도 쿼터로 오판하지 않는다.
 ★ 처리 도중 끊겨도 데이터가 안 날아가게:
   - 새주소코드 확보 성공 -> cvs/vacancy_candidates_enriched.csv에 매 건 즉시 append
   - "새주소 자체가 없음"으로 확인된 건(영구적 사실, 재시도 무의미)
@@ -34,6 +38,7 @@ import time
 from dotenv import load_dotenv
 
 from enrich_building_age import (
+    API_FAILURE,
     get_building_title,
     load_bjdong_table,
 )
@@ -49,8 +54,9 @@ ENRICHED_CSV = os.path.join(CVS_DIR, "vacancy_candidates_enriched.csv")
 UNRESOLVABLE_CSV = os.path.join(CVS_DIR, "vacancy_candidates_unresolvable.csv")
 
 SLEEP_BETWEEN_CALLS = 0.15
-# 이 횟수만큼 연속으로 API 조회가 실패하면 일일 쿼터 초과로 보고 즉시 중단
+# 이 횟수만큼 "조회 자체 실패(API_FAILURE)"가 연속되면 쿼터 소진/API 장애로 보고 즉시 중단.
 # (쿼터가 다 찬 뒤에는 어차피 나머지 전부 실패하므로 계속 돌리는 건 시간 낭비)
+# ※ "정상 응답이지만 해당 지번 없음"은 이 카운트에 안 들어감 - 스트릭을 리셋한다.
 CONSECUTIVE_FAIL_LIMIT = 15
 
 ENRICHED_FIELDNAMES = ["gu", "dong", "bun", "ji", "addr", "bld_nm", "use", "area",
@@ -83,10 +89,11 @@ def load_resolved_keys() -> set:
 def enrich_with_road_code(candidates: list, bjdong_table: dict) -> list:
     """
     아직 안 풀린 후보만 처리. 성공/영구실패는 매 건 즉시 파일에 append(중단내성).
-    연속 API 실패가 CONSECUTIVE_FAIL_LIMIT에 도달하면 쿼터 초과로 보고 즉시 중단.
+    "조회 자체 실패(API_FAILURE)"가 CONSECUTIVE_FAIL_LIMIT회 연속되면 쿼터 소진/장애로
+    보고 즉시 중단. "정상 응답이지만 지번 없음"은 영구실패로 기록하고 스트릭을 리셋한다.
     """
     enriched = []
-    no_bjdong, no_naroad, api_fail = 0, 0, 0
+    no_bjdong, no_naroad, no_building, api_fail = 0, 0, 0, 0
     consecutive_fail = 0
     quota_hit = False
 
@@ -118,16 +125,25 @@ def enrich_with_road_code(candidates: list, bjdong_table: dict) -> list:
             title = get_building_title(sigungu_cd, bjdong_cd, bun, ji)
             time.sleep(SLEEP_BETWEEN_CALLS)
 
-            if title is None:
+            if title is API_FAILURE:
+                # 조회 자체가 실패(네트워크/429/5xx/포털 호출한도). 재시도 대상 - 파일에 안 남김.
                 api_fail += 1
                 consecutive_fail += 1
                 if consecutive_fail >= CONSECUTIVE_FAIL_LIMIT:
                     quota_hit = True
-                    print(f"  ⚠️ API 조회가 {CONSECUTIVE_FAIL_LIMIT}회 연속 실패 -> "
-                          f"일일 쿼터 초과로 판단, [{i}/{len(candidates)}]에서 중단합니다.")
+                    print(f"  ⚠️ 조회 실패가 {CONSECUTIVE_FAIL_LIMIT}회 연속 -> "
+                          f"일일 쿼터 소진 또는 API 장애로 판단, [{i}/{len(candidates)}]에서 중단합니다.")
                     break
                 continue
+            # 정상 응답을 받았으면(건물이 있든 없든) 실패 스트릭 리셋
             consecutive_fail = 0
+
+            if title is None:
+                # 정상 응답이지만 건축HUB에 해당 지번의 건물이 없음 -> 영구, 재시도 무의미
+                no_building += 1
+                unres_writer.writerow({f: c[f] for f in CANDIDATE_KEY_FIELDS})
+                unres_f.flush()
+                continue
 
             na_road_cd = (title.get("naRoadCd") or "").strip()
             na_main_bun = (title.get("naMainBun") or "").strip()
@@ -154,15 +170,17 @@ def enrich_with_road_code(candidates: list, bjdong_table: dict) -> list:
 
             if i % 200 == 0:
                 print(f"  [{i}/{len(candidates)}] 처리 중... (새주소 확보 {len(enriched)}건, "
-                      f"동코드매핑실패 {no_bjdong}, 새주소없음 {no_naroad}, API실패 {api_fail})")
+                      f"동코드매핑실패 {no_bjdong}, 미등록지번 {no_building}, 새주소없음 {no_naroad}, "
+                      f"조회실패 {api_fail})")
     finally:
         enr_f.close()
         unres_f.close()
 
     print(f"\n이번 실행 새주소코드 확보: {len(enriched)}/{len(candidates)}건")
     print(f"  - 동코드 매핑 실패(영구): {no_bjdong}건")
-    print(f"  - 새주소 미등록(영구): {no_naroad}건")
-    print(f"  - API 조회 실패(재시도 대상): {api_fail}건{' - 쿼터 초과로 조기 중단됨' if quota_hit else ''}")
+    print(f"  - 건축HUB 미등록 지번(영구): {no_building}건")
+    print(f"  - 새주소코드 없음(영구): {no_naroad}건")
+    print(f"  - 조회 실패(재시도 대상): {api_fail}건{' - 쿼터 소진/장애로 조기 중단됨' if quota_hit else ''}")
     return enriched
 
 

@@ -57,7 +57,20 @@ SIGUNGU_NAME_TO_CODE = {
 }
 
 
+# get_building_title()가 "조회 자체가 실패"했을 때 돌려주는 sentinel.
+#   - 네트워크 오류/타임아웃, HTTP 429·5xx, 공공데이터포털 호출한도 에러 응답
+#     (LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR 등), 파싱 불가 응답
+# "정상 응답인데 해당 지번이 건축HUB에 없음"(-> None)과 구분하기 위한 것.
+# link_candidates_to_energy.py가 이 값만 세어서 "쿼터/장애로 조기 중단" 판단에 쓴다.
+API_FAILURE = object()
+
+# 포털이 정상 처리했다고 보는 resultCode (BldRgstHubService 기준 "00").
+# 그 외 값(예: "22" = 트래픽 초과)은 조회 실패로 취급.
+_OK_RESULT_CODES = {"00", "0", "NORMAL SERVICE.", "NORMAL_SERVICE"}
+
+
 def safe_get(url, params):
+    """HTTP 요청 1건. 네트워크 예외면 재시도 후 None, 응답을 받으면 상태코드 무관하게 그대로 반환."""
     for attempt in range(MAX_RETRY + 1):
         try:
             return requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
@@ -69,21 +82,42 @@ def safe_get(url, params):
 
 
 def get_building_title(sigungu_cd: str, bjdong_cd: str, bun: str, ji: str):
-    """verification_scan.py와 동일한 표제부 조회 함수 (그대로 재사용)."""
+    """
+    건축HUB 표제부(getBrTitleInfo) 조회. 반환값 3가지를 구분한다:
+      - dict          : 조회 성공, 표제부 항목
+      - None          : 정상 응답이지만 해당 지번의 건물이 없음 (영구 사실)
+      - API_FAILURE   : 조회 자체 실패 (네트워크/429/5xx/포털 호출한도 에러/파싱불가)
+    """
     url = f"{BUILDING_BASE}/getBrTitleInfo"
     params = {"serviceKey": SERVICE_KEY_BUILDING, "sigunguCd": sigungu_cd, "bjdongCd": bjdong_cd,
               "bun": bun, "ji": ji, "_type": "json"}
     resp = safe_get(url, params)
     if resp is None:
-        return None
+        return API_FAILURE  # 네트워크 오류/타임아웃 (재시도 후에도 실패)
+    if resp.status_code == 429 or resp.status_code >= 500:
+        return API_FAILURE  # 게이트웨이 호출한도 / 서버 오류
+
     try:
-        items = resp.json().get("response", {}).get("body", {}).get("items", {})
+        payload = resp.json()
+    except ValueError:
+        # 쿼터 초과 시 포털이 JSON 요청에도 XML 에러(OpenAPI_ServiceResponse)를 주는 경우가 있음
+        return API_FAILURE
+
+    # 포털 공통 에러 엔벨로프 확인 (resultCode가 "00"이 아니면 데이터가 아니라 에러)
+    result_code = str(
+        payload.get("response", {}).get("header", {}).get("resultCode", "")
+    ).strip()
+    if result_code and result_code not in _OK_RESULT_CODES:
+        return API_FAILURE
+
+    try:
+        items = payload.get("response", {}).get("body", {}).get("items", {})
         item = items.get("item") if items else None
         if isinstance(item, list):
             return item[0] if item else None
-        return item
+        return item  # dict(정상) 또는 None(해당 지번 없음)
     except Exception:
-        return None
+        return API_FAILURE
 
 
 def load_bjdong_table():
@@ -203,11 +237,12 @@ def main():
         title = get_building_title(sigungu_cd, bjdong_cd, bun, ji)
         time.sleep(0.15)
 
-        if title is None:
+        if title is None or title is API_FAILURE:
             r["사용승인일"] = ""
             r["건물연식"] = ""
             failed += 1
-            print(f"  [{i}/{len(mismatched)}] API 조회 실패: {r.get('상가명')}")
+            reason = "미등록 지번" if title is None else "API 조회 실패"
+            print(f"  [{i}/{len(mismatched)}] {reason}: {r.get('상가명')}")
             continue
 
         # ⚠️ 국토교통부 표제부 API 응답 필드명이 실제로 'useAprDay'가 맞는지
