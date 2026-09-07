@@ -15,12 +15,12 @@ v1.0(격차·배율 50:50)에 이어, enrich_building_age.py로 실측 확보한
 
 ★ enrich_building_age.py가 만든 verification_log_with_age.csv가 있어야
   연식 결합이 가능함. 없으면 v1.0(격차+배율 50:50)으로 자동 대체 실행.
-★ 전체 스캔 건물 수(303)·집합건축물 수(77) 등 표본 통계는 원본
-  verification_log.csv 기준 그대로 유지 (verification_log_with_age.csv는
-  불일치 71건만 담긴 서브셋이라 KPI 집계에는 쓰지 않음).
+★ 전체 스캔 건물 수·집합건축물 수 등 표본 통계는 원본 verification_log.csv
+  기준 그대로 유지 (verification_log_with_age.csv는 불일치 건물만 담긴
+  서브셋이라 KPI 집계에는 쓰지 않음).
 
 필요한 파일:
-  cvs/verification_log.csv           (필수, 303개 건물 원본 로그)
+  cvs/verification_log.csv           (필수, verification_scan.py 원본 로그)
   cvs/verification_log_with_age.csv  (있으면 v2.0 연식 가중 적용, 없으면 v1.0으로 대체)
 """
 
@@ -202,7 +202,7 @@ def generate(result: dict) -> str:
 </head>
 <body>
 <h1>역산공실탐지기반 — 의심건물 스크리닝 리포트 (2단계) — {result['version']}</h1>
-<div class="subtitle">등록전유부수 대비 실제영업중수 격차·배율·건물연식 기반 우선 확인 대상 우선순위 — verification_log.csv(303개 건물 실측) 재활용</div>
+<div class="subtitle">등록전유부수 대비 실제영업중수 격차·배율·건물연식 기반 우선 확인 대상 우선순위 — verification_log.csv({result['n_total_scanned']}개 건물 실측) 재활용</div>
 
 <div class="scope" style="font-size: 13px !important; line-height: 1.6 !important;">
 📍 <b>이 리포트의 특징:<br></b> "등록전유부수 &lt; 실제영업중수" 불일치는 그 자체로 불법 증축·무단 용도변경을 확정하는 증거가 아니라,<br>
