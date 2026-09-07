@@ -35,7 +35,7 @@
 </head>
 <body>
 <h1>역산공실탐지기반 — 안전등급 지도 (1단계 메인화면 프로토타입)</h1>
-<div class="subtitle">서울시 노후 대형상가·전통시장 48곳 | 공실 순증감률 + 폐업률 결합 안전관리 우선순위 등급</div>
+<div class="subtitle">서울시 노후 대형상가·전통시장 277곳 | 공실 순증감률 + 폐업률 결합 안전관리 우선순위 등급</div>
 
 <div class="caveat">
 📍 <b>위치 정확도 안내:</b> 지도에 표시된 안전등급(D~A)과 위험점수는 `risk_grade_model.py`가 48개 상권의 실측 데이터로 계산한 결과 그대로다.<br>
@@ -74,15 +74,15 @@
   <div class="side-panel">
     <div class="kpi-card">
       <div class="kpi-label">분석 대상 상권</div>
-      <div class="kpi-value" style="color:#52514e;">48곳</div>
+      <div class="kpi-value" style="color:#52514e;">277곳</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">D등급 (최우선 점검)</div>
-      <div class="kpi-value" style="color:#e34948;">6곳</div>
+      <div class="kpi-value" style="color:#e34948;">48곳</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">C등급 (우선 점검 권고)</div>
-      <div class="kpi-value" style="color:#d97706;">15곳</div>
+      <div class="kpi-value" style="color:#d97706;">64곳</div>
     </div>
     <div class="top-list">
       <div class="top-list-title">🔴 D등급 상권 (위험점수 순)</div>
@@ -93,8 +93,8 @@
 
 <div class="note">
 ※ 방법론: 점포수 순증감률(2021~2025, 서울시 상권분석서비스)과 최근4분기 평균폐업률을 결합해 위험점수(0~100)
-산출,<br< 절대기준 고정 임계값(60점 이상 D, 40~60 C, 20~40 B, 20미만 A)으로 48곳을 등급 분류
-(D 6곳·C 15곳·B 18곳·A 9곳).<br> 상세 산출 근거는 `역산공실탐지기반_안전등급모델.html` 참고.
+산출,<br< 절대기준 고정 임계값(60점 이상 D, 40~60 C, 20~40 B, 20미만 A)으로 277곳을 등급 분류
+(D 48곳·C 64곳·B 109곳·A 56곳).<br> 상세 산출 근거는 `역산공실탐지기반_안전등급모델.html` 참고.
 지도 타일: © OpenStreetMap contributors.
 </div>
 
