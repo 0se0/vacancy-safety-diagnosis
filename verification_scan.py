@@ -18,6 +18,8 @@ import json
 import os
 from dotenv import load_dotenv
 
+from seoul_districts import SEOUL_GU_CODES
+
 load_dotenv()
 
 SERVICE_KEY_SANGGA = os.environ.get("SANGGA_API_KEY", "")
@@ -29,11 +31,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CVS_DIR = os.path.join(BASE_DIR, "cvs")
 HTML_DIR = os.path.join(BASE_DIR, "html")
 
-# 스캔할 구들 (표본 좀 넓히려고 8개 구, 구당 40건씩 = 최대 320건)
-SCAN_SIGUNGU_CODES = {
-    "11680": "강남구", "11440": "마포구", "11215": "광진구", "11110": "종로구",
-    "11140": "중구", "11560": "영등포구", "11200": "성동구", "11305": "강북구",
-}
+# 스캔할 구들 - 서울 25개구 전체(commercial_vacancy_screening.py와 동일 범위로 확장,
+# 2026-09-01 최초 버전은 8개구 하드코딩이었음). 구당 40건씩 = 최대 1,000건.
+SCAN_SIGUNGU_CODES = SEOUL_GU_CODES
 NUM_ROWS_PER_REGION = 40
 REQUEST_TIMEOUT = 20
 MAX_RETRY = 2

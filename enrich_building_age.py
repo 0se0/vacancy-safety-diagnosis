@@ -6,7 +6,7 @@ verification_scan.py가 이미 만들어둔 verification_log.csv 중
 사용승인일(준공연도)만 추가로 조회해서 붙이는 보강 스크립트.
 
 ★ 기존 verification_scan.py는 전혀 건드리지 않음 — 그 파일이 만든
-  등록전유부수·실제영업중수·92.2% 같은 숫자는 이 스크립트로 절대 안 바뀜.
+  등록전유부수·실제영업중수·불일치율 같은 숫자는 이 스크립트로 절대 안 바뀜.
 ★ 상가정보(실시간, 매번 바뀔 수 있는 API)는 여기서 아예 호출하지 않음.
   건축물대장 표제부(준공연도 = 이미 확정된 과거 사실)만 조회함.
 
@@ -31,6 +31,8 @@ from datetime import datetime
 import requests
 from dotenv import load_dotenv
 
+from seoul_districts import SEOUL_GU_NAME_TO_CODE
+
 load_dotenv()
 
 SERVICE_KEY_BUILDING = os.environ.get("BUILDING_API_KEY", "")
@@ -50,11 +52,10 @@ BJDONG_CODE_FILE_CANDIDATES = [
 REQUEST_TIMEOUT = 20
 MAX_RETRY = 2
 
-# verification_scan.py의 SCAN_SIGUNGU_CODES와 동일 (구 이름 -> 시군구코드 역매핑용)
-SIGUNGU_NAME_TO_CODE = {
-    "강남구": "11680", "마포구": "11440", "광진구": "11215", "종로구": "11110",
-    "중구": "11140", "영등포구": "11560", "성동구": "11200", "강북구": "11305",
-}
+# verification_scan.py가 이제 서울 25개구 전체를 스캔하므로(2026-09-01 최초 버전은
+# 8개구 하드코딩), 여기도 seoul_districts.py의 전체 매핑을 그대로 씀 (이름 유지 - 아래
+# __main__에서 그대로 참조).
+SIGUNGU_NAME_TO_CODE = SEOUL_GU_NAME_TO_CODE
 
 
 # get_building_title()가 "조회 자체가 실패"했을 때 돌려주는 sentinel.
@@ -277,7 +278,7 @@ def main():
     print("=" * 60)
     print("\n※ 원본 verification_log.csv는 전혀 수정되지 않았습니다.")
     print("※ 이 스크립트는 등록전유부수·실제영업중수를 다시 조회하지 않으므로")
-    print("  기존 보고서의 71건/92.2% 등의 수치는 그대로 유효합니다.")
+    print("  verification_scan.py가 낸 불일치율·건수는 이 스크립트로 바뀌지 않습니다.")
 
 
 if __name__ == "__main__":
