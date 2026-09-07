@@ -18,13 +18,22 @@ OpenStreetMap Nominatim(무료, API 키 불필요)으로 지오코딩해서 채�
 ★ 실패 처리: 검색 결과가 없거나 서울 바깥이면 미확보로 남긴다(지어내지 않음).
   이름에 괄호로 별칭이 붙어 있거나("OO시장(OO상점가)") "역 1번" 같은 출입구
   표기가 붙어 있으면 원 검색이 실패하기 쉬워서, 괄호 앞부분 -> "역 N번" 접미사
-  제거 순으로 재시도한다.
+  제거 -> 괄호 안 별칭들(콤마로 분리) 순으로 재시도한다.
+  ★★ 2026-09-07 1차 실행(229곳) 결과 107곳 성공/122곳 실패 후 재시도 로직에
+  괄호 안 별칭 검색을 추가함(2차 개선). "동원전통종합시장(동원시장, 동원전통시장
+  상점가)"처럼 괄호 앞부분이 아니라 괄호 안 별칭 쪽이 OSM에 등록돼 있는 경우가
+  있어서다. 다만 "OO동 골목시장"류 소규모 동네시장은 OSM 자체에 없는 경우가
+  많아 이 개선으로도 회복 안 되는 게 정상이다 - 그런 것까지 억지로 맞추려고
+  안 하고 미확보로 남긴다.
+  ★★ load_resolved()는 "성공한 것"만 완료로 치므로, 실패했던 항목은 스크립트를
+  다시 돌리면 자동으로 재시도된다(성공한 107곳은 다시 안 건드림).
 
 ★ Nominatim 이용정책(1req/sec, User-Agent 명시) 준수 - 매 요청 사이 1.1초 대기.
 
 돌리는 법:
   python geocode_missing_markets.py
-  결과: cvs/market_coords_geocoded.csv (누적, 중단돼도 이어서 실행 가능)
+  결과: cvs/market_coords_geocoded.csv (market 기준 최신 결과로 덮어써 누적,
+        실패했던 항목은 재실행 시 자동 재시도)
 """
 import csv
 import os
@@ -47,7 +56,7 @@ FIELDNAMES = ["market", "lat", "lon", "district", "matched_query"]
 
 
 def _query_variants(name: str) -> list:
-    """원본 -> 괄호 앞부분만 -> '역 N번' 접미사 제거, 순서대로 시도할 검색어 목록."""
+    """원본 -> 괄호 앞부분 -> '역 N번' 접미사 제거 -> 괄호 안 별칭들, 순서대로 시도."""
     variants = [name]
     base = re.split(r"[（(]", name)[0].strip()
     if base and base not in variants:
@@ -58,6 +67,15 @@ def _query_variants(name: str) -> list:
     no_station = re.sub(r"역$", "", no_exit).strip()
     if no_station and no_station not in variants:
         variants.append(no_station)
+
+    # 괄호 안 내용(콤마로 여러 별칭 나열된 경우 각각) - 괄호 앞부분이 실패해도
+    # 별칭 쪽이 OSM에 등록돼 있을 수 있어서 마지막으로 시도
+    paren = re.search(r"[（(]([^)）]*)[)）]", name)
+    if paren:
+        for alias in paren.group(1).split(","):
+            alias = alias.strip()
+            if alias and alias not in variants and alias != "기능상실":
+                variants.append(alias)
     return variants
 
 
@@ -90,39 +108,42 @@ def geocode_one(name: str):
     return None
 
 
-def load_resolved() -> set:
+def load_all_rows() -> dict:
+    """market -> row 딕셔너리. 파일 없으면 빈 딕셔너리."""
     if not os.path.exists(OUT_CSV):
-        return set()
+        return {}
     with open(OUT_CSV, encoding="utf-8-sig") as f:
-        return {row["market"] for row in csv.DictReader(f)}
+        return {row["market"]: row for row in csv.DictReader(f)}
 
 
 if __name__ == "__main__":
     missing = [m for m in TARGET_MARKETS if m not in MARKET_COORDS]
-    resolved = load_resolved()
-    todo = [m for m in missing if m not in resolved]
-    print(f"좌표 없는 상권 {len(missing)}곳 중 이미 처리된 {len(resolved)}곳 제외 -> {len(todo)}곳 진행")
+    all_rows = load_all_rows()
+    already_succeeded = {m for m, r in all_rows.items() if r.get("lat")}
+    todo = [m for m in missing if m not in already_succeeded]
+    print(f"좌표 없는 상권 {len(missing)}곳 중 이미 성공한 {len(already_succeeded)}곳 제외 "
+          f"-> {len(todo)}곳 (재시도 포함) 진행")
 
-    exists = os.path.exists(OUT_CSV)
-    with open(OUT_CSV, "a", encoding="utf-8-sig", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
-        if not exists:
+    success, fail = 0, 0
+    for i, name in enumerate(todo, 1):
+        result = geocode_one(name)
+        if result is None:
+            fail += 1
+            all_rows[name] = {"market": name, "lat": "", "lon": "", "district": "", "matched_query": ""}
+        else:
+            lat, lon, district, query = result
+            success += 1
+            all_rows[name] = {"market": name, "lat": lat, "lon": lon,
+                               "district": district, "matched_query": query}
+        # 매 건 파일 전체를 다시 씀 - 중단돼도 여기까지 결과는 안 날아감
+        with open(OUT_CSV, "w", encoding="utf-8-sig", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=FIELDNAMES)
             writer.writeheader()
+            writer.writerows(all_rows.values())
+        if i % 20 == 0:
+            print(f"  [{i}/{len(todo)}] 이번 실행 성공 {success} / 실패 {fail}")
 
-        success, fail = 0, 0
-        for i, name in enumerate(todo, 1):
-            result = geocode_one(name)
-            if result is None:
-                fail += 1
-                writer.writerow({"market": name, "lat": "", "lon": "", "district": "", "matched_query": ""})
-            else:
-                lat, lon, district, query = result
-                success += 1
-                writer.writerow({"market": name, "lat": lat, "lon": lon,
-                                  "district": district, "matched_query": query})
-            f.flush()
-            if i % 20 == 0:
-                print(f"  [{i}/{len(todo)}] 성공 {success} / 실패 {fail}")
-
-    print(f"\n완료: 성공 {success}/{len(todo)}, 실패(미확보) {fail}/{len(todo)}")
+    print(f"\n이번 실행: 성공 {success}/{len(todo)}, 실패(미확보) {fail}/{len(todo)}")
+    total_success = sum(1 for r in all_rows.values() if r.get("lat"))
+    print(f"누적: 성공 {total_success}/{len(all_rows)}")
     print(f"저장: {OUT_CSV}")
