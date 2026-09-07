@@ -1,6 +1,6 @@
 # 역산공실탐지 — 노후 상업건물 안전사각지대 진단 모델
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
 
@@ -197,4 +197,4 @@ python vacancy_matching_poc.py
 
 ## 라이선스
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE)
