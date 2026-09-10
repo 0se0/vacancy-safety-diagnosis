@@ -1,14 +1,20 @@
 """
 market_energy_matching.py
 
-safety_map.py의 TARGET_MARKETS(48개 노후 대형상가/전통시장)를 상가정보 API
-건물명과 안전하게 매칭해서 전력사용량 추세를 구한다. risk_grade_model.py의
+alt_vacancy_indicator.py의 TARGET_MARKETS(2026-09-07 기준 277개 노후 대형상가/
+전통시장, 그중 safety_map.py의 MARKET_COORDS에 좌표가 있는 171곳)를 상가정보
+API 건물명과 안전하게 매칭해서 전력사용량 추세를 구한다. risk_grade_model.py의
 MARKET_ENERGY_TREND에 넣을 수 있는 형태로 출력.
 
 ★ 2026-09-01: 8개구(강남·마포·광진·종로·중구·영등포·성동·강북)만 스캔해서
   4/48곳만 매칭 성공(risk_grade_model.py에 하드코딩됨).
 ★ 2026-09-02: 나머지 44곳이 있는 10개구(용산·동대문·관악·성북·도봉·노원·
   강서·동작·송파·중랑)로 확장. 어제와 같은 "안전 매칭" 원칙을 그대로 적용.
+★ 2026-09-07: TARGET_MARKETS가 48 -> 277개로 커지면서 MARKET_COORDS도 48 ->
+  171개로 늘어남 - 기존에 스캔했던 18개구 안에도 그때는 없던 신규 매칭 대상이
+  생겼을 수 있어서, "이미 스캔한 구는 건너뛴다"는 제약을 없애고 서울 25개구
+  전체를 매번 새로 스캔하도록 바꿈. 매칭 로직 자체(구 단위 제한 + 유일 매칭만)는
+  그대로라 재매칭해도 안전하다 - API 호출이 좀 더 들 뿐이다.
 
 안전 매칭 원칙(중요 - 이걸 안 지키면 "평화시장/청평화시장/동평화시장" 같은
 서로 다른 상권이 섞이는 사고가 남):
@@ -20,7 +26,7 @@ MARKET_ENERGY_TREND에 넣을 수 있는 형태로 출력.
 
 돌리는 법:
   python market_energy_matching.py
-  (신규 10개구 전수 스캔이라 몇 분 걸림)
+  (25개구 전수 스캔이라 몇 분 걸림)
   출력: 매칭 성공 상권 목록 + risk_grade_model.py MARKET_ENERGY_TREND에
         붙여넣을 수 있는 코드 스니펫
 """
@@ -32,22 +38,18 @@ import requests
 from dotenv import load_dotenv
 
 from energy_vacancy_indicator import load_energy_usage
+from risk_grade_model import MARKET_ENERGY_TREND
 from safety_map import MARKET_COORDS
+from seoul_districts import SEOUL_GU_CODES
 
 load_dotenv()
 
 SERVICE_KEY_SANGGA = os.environ.get("SANGGA_API_KEY", "")
 SANGGA_BASE = "https://apis.data.go.kr/B553077/api/open/sdsc2"
 
-# 2026-09-01에 이미 스캔한 8개구(risk_grade_model.py에 결과 반영됨) - 중복 스캔 안 함
-ALREADY_SCANNED_GU = {"강남구", "마포구", "광진구", "종로구", "중구", "영등포구", "성동구", "강북구"}
-
-# 이번에 새로 스캔할 10개구 (48개 상권 중 나머지가 위치한 구)
-NEW_GU_CODES = {
-    "11170": "용산구", "11230": "동대문구", "11620": "관악구", "11290": "성북구",
-    "11320": "도봉구", "11350": "노원구", "11500": "강서구", "11590": "동작구",
-    "11710": "송파구", "11260": "중랑구",
-}
+# 서울 25개구 전체 스캔 (2026-09-07, 위 ★ 참고 - "이미 스캔한 구 제외" 방식을
+# 없애고 매번 전체를 다시 스캔)
+NEW_GU_CODES = SEOUL_GU_CODES
 
 NUM_ROWS_PER_PAGE = 1000
 REQUEST_TIMEOUT = 20
@@ -130,7 +132,7 @@ def match_markets(gu_stores: dict) -> dict:
 
 
 if __name__ == "__main__":
-    print(f"=== 1단계: 신규 {len(NEW_GU_CODES)}개구 전수 스캔 ===")
+    print(f"=== 1단계: 대상 {len(NEW_GU_CODES)}개구 전수 스캔 ===")
     gu_stores = {}
     for cd, gu in NEW_GU_CODES.items():
         print(f"  {gu}({cd}) 스캔 중...")
@@ -138,9 +140,10 @@ if __name__ == "__main__":
         gu_stores[gu] = stores
         print(f"    -> {len(stores):,}건 조회")
 
-    print("\n=== 2단계: 48개 상권과 안전 매칭 (구 단위 제한 + 유일 매칭만) ===")
+    print(f"\n=== 2단계: {len(MARKET_COORDS)}개 상권과 안전 매칭 (구 단위 제한 + 유일 매칭만) ===")
     matched = match_markets(gu_stores)
-    print(f"신규 매칭 성공: {len(matched)}곳")
+    print(f"매칭 성공: {len(matched)}곳 (기존 MARKET_ENERGY_TREND에 이미 있던 것 포함,"
+          f" 재확인된 매칭도 그대로 재출력됨)")
     for m, (key, nm, gu) in matched.items():
         print(f"  {m:45s} -> {nm} ({gu}) key={key}")
 
@@ -168,7 +171,10 @@ if __name__ == "__main__":
         trend_results[m] = trend
         print(f"  {m}: 전반기={early_avg:.0f} 후반기={recent_avg:.0f} 추세={trend:+.1f}%")
 
-    print(f"\n최종 신규 에너지 매칭: {len(trend_results)}곳 (기존 4곳과 합치면 {len(trend_results) + 4}곳)")
-    print("\n=== risk_grade_model.py의 MARKET_ENERGY_TREND에 추가할 코드 ===")
-    for m, t in trend_results.items():
+    new_only = {m: t for m, t in trend_results.items() if m not in MARKET_ENERGY_TREND}
+    print(f"\n이번 실행 에너지 추세 계산: {len(trend_results)}곳")
+    print(f"그중 risk_grade_model.py의 MARKET_ENERGY_TREND에 아직 없는 신규: {len(new_only)}곳")
+    print(f"반영하면 총 {len(MARKET_ENERGY_TREND) + len(new_only)}곳")
+    print("\n=== risk_grade_model.py의 MARKET_ENERGY_TREND에 추가할 코드(신규만) ===")
+    for m, t in new_only.items():
         print(f'    "{m}": {t},')

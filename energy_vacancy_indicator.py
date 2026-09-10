@@ -26,7 +26,7 @@ energy_vacancy_indicator.py
   1. .env에 SANGGA_API_KEY 필요 (verification_scan.py와 동일 키)
   2. cvs2/전기에너지, cvs2/가스에너지 폴더에 월별 CSV 있어야 함 (연구자 로컬 전용,
      .gitignore에 걸려있어 커밋 안 됨)
-  3. python energy_vacancy_indicator.py 실행 (8개구 스캔 + 24개월 x 2종 에너지
+  3. python energy_vacancy_indicator.py 실행 (SCAN_SIGUNGU_CODES 전체 스캔 + 24개월 x 2종 에너지
      파일 처리라 몇 분 걸림)
   4. 결과: html/역산공실탐지기반_에너지지표.html
 """
@@ -40,6 +40,8 @@ import requests
 from dotenv import load_dotenv
 from scipy import stats
 
+from seoul_districts import SEOUL_GU_CODES
+
 load_dotenv()
 
 SERVICE_KEY_SANGGA = os.environ.get("SANGGA_API_KEY", "")
@@ -49,11 +51,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CVS2_DIR = os.path.join(BASE_DIR, "cvs2")
 HTML_DIR = os.path.join(BASE_DIR, "html")
 
-# verification_scan.py의 SCAN_SIGUNGU_CODES와 동일한 8개구 (표본 확대판)
-SCAN_SIGUNGU_CODES = {
-    "11680": "강남구", "11440": "마포구", "11215": "광진구", "11110": "종로구",
-    "11140": "중구", "11560": "영등포구", "11200": "성동구", "11305": "강북구",
-}
+# 서울 25개구 전체 (commercial_vacancy_screening.py, verification_scan.py와 동일 범위로
+# 확장 - 2026-09-01 최초 버전은 8개구 하드코딩이었음). MAX_PAGES_PER_GU 캡은 그대로
+# 유지 - 구당 상한이 있어 점포 많은 대형구는 부분표본이라는 성격은 안 바뀜.
+SCAN_SIGUNGU_CODES = SEOUL_GU_CODES
 NUM_ROWS_PER_PAGE = 1000
 MAX_PAGES_PER_GU = 5  # 구당 최대 5,000건 (8개구 총 최대 40,000건) - API 쿼터 안전마진
 REQUEST_TIMEOUT = 20
@@ -103,7 +104,7 @@ def scan_stores(signgu_cd: str) -> list:
 
 def collect_buildings() -> dict:
     """
-    8개구 전체 스캔해서 건물별(도로명코드,본번,부번) -> 실제 영업중 점포수로 집계.
+    SCAN_SIGUNGU_CODES 전체 스캔해서 건물별(도로명코드,본번,부번) -> 실제 영업중 점포수로 집계.
     반환: {(rd_cd, bbno, buno): {'store_count': int, 'gu': str, 'addr': str, 'bld_nm': str}}
     """
     buildings = defaultdict(lambda: {"store_count": 0, "gu": "", "addr": "", "bld_nm": ""})
@@ -134,7 +135,7 @@ def load_energy_usage(signgu_codes=None) -> dict:
     """
     cvs2/전기에너지, cvs2/가스에너지 24개월치를 대상 구로 필터링해서
     건물별(도로명코드,본번,부번) -> {'elec': {월: 사용량}, 'gas': {월: 사용량}}로 집계.
-    signgu_codes를 안 주면 기본 8개구(SCAN_SIGUNGU_CODES) 기준(기존 호출부 호환).
+    signgu_codes를 안 주면 기본 SCAN_SIGUNGU_CODES 전체 기준(기존 호출부 호환).
     market_energy_matching.py처럼 다른 구를 볼 때는 signgu_codes로 넘겨서 재사용.
     """
     target_signgu = set(signgu_codes) if signgu_codes is not None else set(SCAN_SIGUNGU_CODES.keys())
@@ -325,7 +326,7 @@ def generate(result: dict) -> str:
 </head>
 <body>
 <h1>역산공실탐지기반 — 에너지 지표: 전기/가스 사용량 기반 건물 활성도 검증</h1>
-<div class="subtitle">상가정보 API 8개구 실측 스캔 × 전기/가스 사용량(2024.01~2025.12) 건물 단위 직접 조인</div>
+<div class="subtitle">상가정보 API {len(SCAN_SIGUNGU_CODES)}개구 실측 스캔 × 전기/가스 사용량(2024.01~2025.12) 건물 단위 직접 조인</div>
 
 <div class="caveat">
 📍 <b>이 지표의 배경:</b> 전기/가스 데이터의 도로명코드(nadres_rd_cd)+본번+부번이 상가정보 API 응답의 rdnmCd+bldMnno+bldSlno와
@@ -337,7 +338,7 @@ def generate(result: dict) -> str:
 
 <div class="kpi-grid">
   <div class="kpi-card">
-    <div class="kpi-label">스캔 건물 수 (8개구)</div>
+    <div class="kpi-label">스캔 건물 수 ({len(SCAN_SIGUNGU_CODES)}개구)</div>
     <div class="kpi-value gray">{result['total_buildings']:,}</div>
     <div class="kpi-sub">상가정보 API 실측</div>
   </div>
@@ -363,7 +364,7 @@ def generate(result: dict) -> str:
 </div>
 
 <div class="note">
-※ 방법론: verification_scan.py와 동일한 소상공인 상가정보 API(storeListInDong)로 8개구를 구당 최대 5,000건까지
+※ 방법론: verification_scan.py와 동일한 소상공인 상가정보 API(storeListInDong)로 {len(SCAN_SIGUNGU_CODES)}개구를 구당 최대 5,000건까지
 페이지네이션 스캔해 (도로명코드,본번,부번) 단위로 실제 영업중 점포수를 집계. 같은 키로 전기/가스 에너지 사용량
 (2024.01~2025.12, 월별)을 조인해 건물별 월평균 사용량과 전반기 대비 후반기 사용량 추세(%)를 계산.<br>
 상관계수는 scipy.stats의 Pearson(선형)·Spearman(순위) 상관을 모두 산출. 전력사용량 추세가 -20% 이하로 급감한
@@ -375,11 +376,11 @@ def generate(result: dict) -> str:
 
 
 if __name__ == "__main__":
-    print("=== 1단계: 상가정보 API 8개구 스캔 (건물별 실제영업중 점포수) ===")
+    print(f"=== 1단계: 상가정보 API {len(SCAN_SIGUNGU_CODES)}개구 스캔 (건물별 실제영업중 점포수) ===")
     buildings = collect_buildings()
     print(f"\n총 {len(buildings):,}개 건물 식별 완료\n")
 
-    print("=== 2단계: 전기/가스 에너지 사용량 로드 (8개구 필터링) ===")
+    print(f"=== 2단계: 전기/가스 에너지 사용량 로드 ({len(SCAN_SIGUNGU_CODES)}개구 필터링) ===")
     usage = load_energy_usage()
     print(f"\n에너지 데이터 매칭 가능 건물 {len(usage):,}건\n")
 

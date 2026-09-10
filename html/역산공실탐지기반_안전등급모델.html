@@ -27,14 +27,14 @@
 </head>
 <body>
 <h1>역산공실탐지기반 — 노후상권 안전관리 우선순위 등급 모델</h1>
-<div class="subtitle">점포수 시계열 순증감률 + 최근4분기 평균폐업률 + 전력사용량 추세(8곳) 결합 | 노후 대형상가 277곳 실측 분석</div>
+<div class="subtitle">점포수 시계열 순증감률 + 최근4분기 평균폐업률 + 전력사용량 추세(33곳) 결합 | 노후 대형상가 277곳 실측 분석</div>
 
 <div class="caveat">
 📍 <b>이 모델의 배경:</b> 2025.5.28 을지로 세운상가 인근 화재 당시 전체 114개 점포 중 40여개가 공실 상태였다(뉴스1·연합뉴스 보도).<br>
 국토교통부 통계상 전국 건축물의 44.4%, 상업용 건축물의 34.4%가 30년 이상 노후 건축물이다(2024년말 기준).<br>
 공실·폐업이 심화된 노후 상권은 관리 소홀로 이어져 안전사고 위험을 높일 수 있다는 문제의식에서,<br>
 검증된 지표를 결합해 지자체·소방당국이 점검 우선순위를 정하는 데 참고할 수 있는 등급을 산출한다.<br>
-8곳은 상가정보 API 실측 건물명과 전기 사용량 데이터를 직접 대조해 확보한 전력사용량 추세까지 세 번째
+33곳은 상가정보 API 실측 건물명과 전기 사용량 데이터를 직접 대조해 확보한 전력사용량 추세까지 세 번째
 신호로 반영했다(나머지는 상권명이 서로 겹치거나 스캔 범위 밖이라 안전하게 매칭되는 건물이 없어 미반영).
 </div>
 
@@ -45,11 +45,11 @@
   </div>
   <div class="kpi-card">
     <div class="kpi-label">D등급 (최우선 점검)</div>
-    <div class="kpi-value" style="color:#e34948;">48곳</div>
+    <div class="kpi-value" style="color:#e34948;">46곳</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">C등급 (우선 점검 권고)</div>
-    <div class="kpi-value" style="color:#f59e0b;">64곳</div>
+    <div class="kpi-value" style="color:#f59e0b;">66곳</div>
   </div>
   <div class="kpi-card">
     <div class="kpi-label">B+A등급 (모니터링/양호)</div>
@@ -72,14 +72,6 @@
             <td>100.0</td>
             <td>-68.4%</td>
             <td>10.7%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
-            <td>이경시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>100.0</td>
-            <td>-40.5%</td>
-            <td>13.8%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
@@ -131,6 +123,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
+            <td>이경시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
+            <td>82.6</td>
+            <td>-40.5%</td>
+            <td>13.8%</td>
+            <td>-1.3%</td>
+            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
+        </tr><tr>
             <td>역촌중앙시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>78.8</td>
@@ -155,14 +155,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
-            <td>강북북부시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>78.1</td>
-            <td>-31.2%</td>
-            <td>3.5%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
             <td>새석관시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>76.9</td>
@@ -171,12 +163,12 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
-            <td>봉일시장</td>
+            <td>강북북부시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>75.7</td>
-            <td>-16.1%</td>
-            <td>4.7%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
+            <td>75.2</td>
+            <td>-31.2%</td>
+            <td>3.5%</td>
+            <td>-8.7%</td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
             <td>가리봉시장</td>
@@ -203,14 +195,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
-            <td>관악종합시장(신원시장)</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>72.5</td>
-            <td>-21.1%</td>
-            <td>3.3%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
             <td>신노량진시장(기능상실)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>71.0</td>
@@ -219,27 +203,11 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
-            <td>한아름시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>70.8</td>
-            <td>-13.3%</td>
-            <td>4.4%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
             <td>수유중앙골목시장(수유중앙시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>70.4</td>
             <td>-9.6%</td>
             <td>5.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
-            <td>조양시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>69.3</td>
-            <td>-12.0%</td>
-            <td>4.4%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
@@ -267,6 +235,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
+            <td>한아름시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
+            <td>68.7</td>
+            <td>-13.3%</td>
+            <td>4.4%</td>
+            <td>-7.2%</td>
+            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
+        </tr><tr>
             <td>상계주공1단지(가)상가</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>68.3</td>
@@ -291,6 +267,22 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
+            <td>동진시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
+            <td>67.3</td>
+            <td>-33.3%</td>
+            <td>1.1%</td>
+            <td>-99.3%</td>
+            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
+        </tr><tr>
+            <td>관악종합시장(신원시장)</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
+            <td>67.0</td>
+            <td>-21.1%</td>
+            <td>3.3%</td>
+            <td>-5.0%</td>
+            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
+        </tr><tr>
             <td>신곡종합시장(신월6동 골목시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>66.7</td>
@@ -304,14 +296,6 @@
             <td>66.5</td>
             <td>-3.4%</td>
             <td>7.1%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
-            <td>개봉중앙시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>66.4</td>
-            <td>-11.1%</td>
-            <td>4.1%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
@@ -329,14 +313,6 @@
             <td>-15.6%</td>
             <td>5.1%</td>
             <td>-1.8%</td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
-            <td>신도봉시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>65.6</td>
-            <td>-6.5%</td>
-            <td>5.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
             <td>본동인정시장(기능상실)</td>
@@ -411,14 +387,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
-            <td>모래내시장(서중시장)</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
-            <td>61.2</td>
-            <td>-13.4%</td>
-            <td>2.9%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
-        </tr><tr>
             <td>개봉프라자(고척근린시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
             <td>61.2</td>
@@ -433,6 +401,22 @@
             <td>-6.4%</td>
             <td>4.3%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
+            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
+        </tr><tr>
+            <td>봉일시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
+            <td>60.6</td>
+            <td>-16.1%</td>
+            <td>4.7%</td>
+            <td>+0.9%</td>
+            <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
+        </tr><tr>
+            <td>개봉중앙시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#e34948;">D</span></td>
+            <td>60.5</td>
+            <td>-11.1%</td>
+            <td>4.1%</td>
+            <td>-3.9%</td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
             <td>풍납시장</td>
@@ -451,19 +435,19 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#e34948;font-weight:600;">최우선 점검 대상</td>
         </tr><tr>
+            <td>조양시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
+            <td>59.8</td>
+            <td>-12.0%</td>
+            <td>4.4%</td>
+            <td>-2.2%</td>
+            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
+        </tr><tr>
             <td>동대문상가A동</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
             <td>59.6</td>
             <td>-14.9%</td>
             <td>2.5%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
-        </tr><tr>
-            <td>동진시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
-            <td>59.1</td>
-            <td>-33.3%</td>
-            <td>1.1%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
@@ -491,14 +475,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
-            <td>숭인시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
-            <td>57.3</td>
-            <td>-16.6%</td>
-            <td>2.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
-        </tr><tr>
             <td>성내전통시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
             <td>57.2</td>
@@ -523,12 +499,12 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
-            <td>노룬산시장(노룬산골목시장)</td>
+            <td>모래내시장(서중시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
-            <td>56.8</td>
-            <td>-11.6%</td>
-            <td>2.6%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
+            <td>56.5</td>
+            <td>-13.4%</td>
+            <td>2.9%</td>
+            <td>-4.0%</td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
             <td>청량리전통시장</td>
@@ -539,12 +515,12 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
-            <td>영일시장</td>
+            <td>양재시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
             <td>55.6</td>
-            <td>-15.8%</td>
-            <td>1.9%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
+            <td>-18.5%</td>
+            <td>0.9%</td>
+            <td>-14.6%</td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
             <td>아현시장</td>
@@ -611,6 +587,30 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
+            <td>숭인시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
+            <td>53.3</td>
+            <td>-16.6%</td>
+            <td>2.0%</td>
+            <td>-4.0%</td>
+            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
+        </tr><tr>
+            <td>노룬산시장(노룬산골목시장)</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
+            <td>52.8</td>
+            <td>-11.6%</td>
+            <td>2.6%</td>
+            <td>-3.9%</td>
+            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
+        </tr><tr>
+            <td>신도봉시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
+            <td>52.5</td>
+            <td>-6.5%</td>
+            <td>5.0%</td>
+            <td>+17.3%</td>
+            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
+        </tr><tr>
             <td>방신전통시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
             <td>51.9</td>
@@ -635,14 +635,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
-            <td>인헌시장(원당종합시장)</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
-            <td>51.3</td>
-            <td>-5.5%</td>
-            <td>3.3%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
-        </tr><tr>
             <td>홍릉시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
             <td>51.0</td>
@@ -664,14 +656,6 @@
             <td>50.5</td>
             <td>-10.5%</td>
             <td>2.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
-        </tr><tr>
-            <td>양재시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
-            <td>50.3</td>
-            <td>-18.5%</td>
-            <td>0.9%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
@@ -801,6 +785,14 @@
             <td>-15.4%</td>
             <td>2.3%</td>
             <td>+2.0%</td>
+            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
+        </tr><tr>
+            <td>영일시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
+            <td>46.3</td>
+            <td>-15.8%</td>
+            <td>1.9%</td>
+            <td>-0.9%</td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
             <td>공덕시장</td>
@@ -955,6 +947,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
         </tr><tr>
+            <td>인헌시장(원당종합시장)</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
+            <td>41.0</td>
+            <td>-5.5%</td>
+            <td>3.3%</td>
+            <td>+0.8%</td>
+            <td style="color:#f59e0b;font-weight:600;">우선 점검 권고</td>
+        </tr><tr>
             <td>용산전자상가(용산역)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#f59e0b;">C</span></td>
             <td>40.1</td>
@@ -992,14 +992,6 @@
             <td>38.4</td>
             <td>-9.3%</td>
             <td>0.7%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
-            <td>마장축산물시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>38.4</td>
-            <td>-5.9%</td>
-            <td>1.5%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
@@ -1115,14 +1107,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
-            <td>이태원시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>35.5</td>
-            <td>-3.8%</td>
-            <td>2.1%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
             <td>묵1동도깨비시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>35.5</td>
@@ -1203,6 +1187,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
+            <td>망원시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>33.5</td>
+            <td>+24.8%</td>
+            <td>3.9%</td>
+            <td>-5.0%</td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
             <td>경동광성상가(경동시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>33.2</td>
@@ -1243,6 +1235,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
+            <td>마장축산물시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>30.7</td>
+            <td>-5.9%</td>
+            <td>1.5%</td>
+            <td>+6.4%</td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
             <td>강북종합전통시장(강북종합골목시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>30.6</td>
@@ -1255,14 +1255,6 @@
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>30.6</td>
             <td>+2.4%</td>
-            <td>3.9%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
-            <td>망원시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>30.6</td>
-            <td>+24.8%</td>
             <td>3.9%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
@@ -1355,14 +1347,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
-            <td>증산종합시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>29.4</td>
-            <td>+18.0%</td>
-            <td>3.7%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
             <td>시영2단지 무지개종합상가(중계 무지개2단지아파트상가)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>28.9</td>
@@ -1393,6 +1377,14 @@
             <td>+7.1%</td>
             <td>3.6%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
+            <td>이태원시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>28.6</td>
+            <td>-3.8%</td>
+            <td>2.1%</td>
+            <td>-0.1%</td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
             <td>우림골목시장</td>
@@ -1433,6 +1425,14 @@
             <td>+4.0%</td>
             <td>3.5%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
+            <td>뚝도시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>28.1</td>
+            <td>+6.4%</td>
+            <td>3.0%</td>
+            <td>-4.4%</td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
             <td>신림중앙시장(조원동 펭귄시장)</td>
@@ -1531,26 +1531,10 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
-            <td>대조시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>25.0</td>
-            <td>+1.8%</td>
-            <td>3.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
             <td>시영B상가(중계 그린아파트 B 상가)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>25.0</td>
             <td>+2.8%</td>
-            <td>3.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
-            <td>새마을시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>25.0</td>
-            <td>+3.3%</td>
             <td>3.0%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
@@ -1567,14 +1551,6 @@
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>25.0</td>
             <td>+6.1%</td>
-            <td>3.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
-        </tr><tr>
-            <td>뚝도시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
-            <td>25.0</td>
-            <td>+6.4%</td>
             <td>3.0%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
@@ -1627,6 +1603,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
+            <td>증산종합시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>23.5</td>
+            <td>+18.0%</td>
+            <td>3.7%</td>
+            <td>+1.7%</td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
             <td>신림현대종합상가</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>23.4</td>
@@ -1657,6 +1641,14 @@
             <td>+80.0%</td>
             <td>2.8%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
+            <td>대조시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>22.8</td>
+            <td>+1.8%</td>
+            <td>3.0%</td>
+            <td>-1.4%</td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
             <td>방이시장</td>
@@ -1771,6 +1763,14 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
         </tr><tr>
+            <td>새마을시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
+            <td>20.0</td>
+            <td>+3.3%</td>
+            <td>3.0%</td>
+            <td>+2.4%</td>
+            <td style="color:#2a78d6;font-weight:600;">정기 모니터링</td>
+        </tr><tr>
             <td>비단길현대시장(현대시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#2a78d6;">B</span></td>
             <td>20.0</td>
@@ -1883,14 +1883,6 @@
             <td>-3.5%</td>
             <td style="color:#3b6d11;font-weight:600;">양호</td>
         </tr><tr>
-            <td>마포농수산물시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
-            <td>18.4</td>
-            <td>-2.0%</td>
-            <td>1.0%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#3b6d11;font-weight:600;">양호</td>
-        </tr><tr>
             <td>남부골목시장(남부화곡시장, 남부시장)</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
             <td>18.4</td>
@@ -1945,6 +1937,22 @@
             <td>+12.0%</td>
             <td>2.2%</td>
             <td><span style="color:#c8c6bf;">-</span></td>
+            <td style="color:#3b6d11;font-weight:600;">양호</td>
+        </tr><tr>
+            <td>연서시장</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
+            <td>17.8</td>
+            <td>+5.0%</td>
+            <td>1.8%</td>
+            <td>-2.9%</td>
+            <td style="color:#3b6d11;font-weight:600;">양호</td>
+        </tr><tr>
+            <td>신사상가</td>
+            <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
+            <td>17.8</td>
+            <td>+10.8%</td>
+            <td>1.8%</td>
+            <td>-2.9%</td>
             <td style="color:#3b6d11;font-weight:600;">양호</td>
         </tr><tr>
             <td>이문제일시장</td>
@@ -2051,14 +2059,6 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#3b6d11;font-weight:600;">양호</td>
         </tr><tr>
-            <td>연서시장</td>
-            <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
-            <td>15.0</td>
-            <td>+5.0%</td>
-            <td>1.8%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
-            <td style="color:#3b6d11;font-weight:600;">양호</td>
-        </tr><tr>
             <td>백운시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
             <td>15.0</td>
@@ -2067,12 +2067,12 @@
             <td><span style="color:#c8c6bf;">-</span></td>
             <td style="color:#3b6d11;font-weight:600;">양호</td>
         </tr><tr>
-            <td>신사상가</td>
+            <td>마포농수산물시장</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:#3b6d11;">A</span></td>
-            <td>15.0</td>
-            <td>+10.8%</td>
-            <td>1.8%</td>
-            <td><span style="color:#c8c6bf;">-</span></td>
+            <td>14.7</td>
+            <td>-2.0%</td>
+            <td>1.0%</td>
+            <td>-0.0%</td>
             <td style="color:#3b6d11;font-weight:600;">양호</td>
         </tr><tr>
             <td>신영시장</td>
@@ -2290,13 +2290,13 @@
 ※ 방법론: 점포수 순증감률(감소할수록 위험)과 최근4분기 평균폐업률(높을수록 위험)을 각각 0~100으로
 절대기준 점수화(decline_to_score, closure_to_score — alt_vacancy_indicator.py의 고위험/중위험 실측
 임계값 -3%/-7%와 동일 기준 사용)한 뒤 결합해 위험점수를 산출. 전력사용량 추세가 확보된
-8곳은 점포수·폐업률·전력사용량을 0.4:0.4:0.2로, 나머지 269곳은
-점포수·폐업률만 0.5:0.5로 결합한다(전력 데이터는 표본이 8곳뿐이라 가중치를 낮게 잡음).<br>
+33곳은 점포수·폐업률·전력사용량을 0.4:0.4:0.2로, 나머지 244곳은
+점포수·폐업률만 0.5:0.5로 결합한다(전력 데이터는 표본이 33곳뿐이라 가중치를 낮게 잡음).<br>
 점포수·폐업률 두 점수는 상관계수 -0.08로 서로 거의 독립적이며, 실제 위험 발생 여부를 검증할 정답 데이터가
 아직 없어 균등 가중치를 적용했다(향후 소방·안전 점검 이력과 연계해 회귀 기반 가중치로 보완 예정).<br>
 표본 내 상대 순위(4분위수)가 아닌 고정 임계값(60점 이상 D, 40~60 C, 20~40 B, 20미만 A)을 사용하므로 등급 수가
 4등분으로 강제되지 않고 실제 심각도 분포에 따라 달라진다.<br> 노후 대형상가 277곳 실측 분석 결과
-D등급 48곳·C등급 64곳·B등급 109곳·A등급 56곳으로 분류됐다.<br>
+D등급 46곳·C등급 66곳·B등급 109곳·A등급 56곳으로 분류됐다.<br>
 데이터: 서울시 우리마을가게 상권분석서비스(2021~2025), 소상공인 상가정보 API + 한국전력 전기사용량 통계(2024~2025).
 전력사용량 매칭 범위(현재 18개구)를 넓히면 나머지 상권에도 적용할 수 있다.
 </div>
@@ -2306,8 +2306,8 @@ D등급 48곳·C등급 64곳·B등급 109곳·A등급 56곳으로 분류됐다.<
 new Chart(document.getElementById('barChart'), {
   type: 'bar',
   data: {
-    labels: ["증산골목시장", "이경시장", "석관시장", "공항시장역 3번", "공항시장", "용두시장", "중랑동부시장(중랑교종합상가)", "대원종합시장", "역촌중앙시장", "동대문상가C동", "봉천현대시장", "강북북부시장", "새석관시장", "봉일시장", "가리봉시장", "청계천공구상가", "삼양골목시장(삼양시장)", "관악종합시장(신원시장)", "신노량진시장(기능상실)", "한아름시장", "수유중앙골목시장(수유중앙시장)", "조양시장", "동문시장", "방천골목시장", "신신림시장(삼성동시장)", "상계주공1단지(가)상가", "장위전통시장", "영진시장A동", "신곡종합시장(신월6동 골목시장)", "응암시장(신응암시장)", "개봉중앙시장", "신월3동 골목시장", "화곡중앙시장", "신도봉시장", "본동인정시장(기능상실)", "방학동도깨비시장", "미성동 도깨비시장 골목형상점가", "영신상가(제일상가)", "평화시장(남평화시장, 제일평화시장, 신평화패션타운)", "신정2동 골목시장(오목교중앙시장)", "강북북부골목시장", "테크노상가(엘리시움)", "보광시장", "모래내시장(서중시장)", "개봉프라자(고척근린시장)", "남문시장", "풍납시장", "동대문문구완구거리(동대문문구완구시장)", "동대문상가A동", "동진시장", "대명여울빛거리시장(대명시장)", "청평화시장", "동대문상가D동", "숭인시장", "성내전통시장", "동평화시장", "제일시장", "노룬산시장(노룬산골목시장)", "청량리전통시장", "영일시장", "아현시장", "마포시장", "충신시장", "남부종합시장", "영등포전통시장", "서울약령시장", "영천시장입구", "전곡시장", "방신전통시장", "면목골목시장(면목시장)", "고분다리전통시장", "인헌시장(원당종합시장)", "홍릉시장", "신수시장", "광장시장(광장전통시장)", "양재시장", "창신골목시장", "신림종합시장", "박미시장(기능상실)", "푸른터시장(기능상실)", "합정시장", "서교시장", "상계역전종합상가", "대림중앙시장", "중랑동부시장", "평화시장(통일상가, 동화상가)", "솔샘시장(미아6,7동골목시장)", "창동골목시장", "영등포청과시장(조광시장)", "노량진중앙시장", "가락시장역", "동대문패션타운 관광특구", "공덕시장", "신정3동 골목시장", "삼익패션타운(남대문시장)", "남대문시장(자유상가)", "강서농산물도매시장", "대림상가(청계상가)", "수일시장", "성동용답상가시장", "황학시장(서울중앙시장, 신중앙시장)", "고척근린시장", "신성시장(신성골목시장)", "마천중앙시장", "영진시장", "경창시장", "영동교골목시장", "우림시장", "동대문상가B동", "화곡본동시장", "오류시장", "용산전자상가(용산역)", "장안제일시장", "우리시장", "영등포유통상가", "유진상가", "마장축산물시장", "중부시장(신중부시장)", "오류2동버들시장", "밤나무골시장", "장미원골목시장", "영등포시장역 1번", "회기시장", "수유시장옆", "세운상가가동", "마천시장", "중곡제일시장(중곡제일골목시장, 광성시장)", "공릉동 도깨비시장", "청량종합도매시장", "은행나무시장", "명일전통시장", "이태원시장", "묵1동도깨비시장", "조원동 펭귄시장(신림중앙시장)", "도림시장", "후암시장", "독산동 우시장", "종로신진시장", "등마루시장", "수유북부시장옆", "사당시장", "석촌시장", "경동광성상가(경동시장)", "자동차부품상가", "창동신창시장", "청량리수산시장", "백학시장", "강북종합전통시장(강북종합골목시장)", "목사랑시장(목4동시장)", "망원시장", "백련시장", "숭례문수입상가(남대문시장)", "신월7동 골목시장(약수시장, 우성상가)", "강남시장(강남구 강남시장)", "상도전통시장", "관악중부시장", "행당시장상점가", "길음시장", "가락시장", "고척골목시장상점가(그라운드 고척)", "남구로시장", "증산종합시장", "시영2단지 무지개종합상가(중계 무지개2단지아파트상가)", "면곡골목시장", "한양대앞상점가(한양시장, 왕십리맛골목)", "태릉시장 특화거리", "우림골목시장", "관악신사시장", "공항시장역 1번", "남성역골목시장", "포방터시장", "신림중앙시장(조원동 펭귄시장)", "상계중앙시장", "암사종합시장", "우이골목시장(우이시장)", "태능엔터피아(태릉시장)", "서울중앙시장(신중앙시장)", "정릉시장", "화양제일골목시장", "성대전통시장(성대시장)", "영림시장", "돈암시장(돈암제일시장)", "까치산시장", "대조시장", "시영B상가(중계 그린아파트 B 상가)", "새마을시장", "쌍문시장(쌍문역골목시장)", "영등포청과시장교차로", "뚝도시장", "영등포시장역 4번", "대림골목시장(대림시장, 양지시장)", "신흥시장", "남성사계시장(남성시장)", "망원월드컵시장", "돌곶이시장(석관황금시장)", "신림현대종합상가", "청담삼익시장", "봉천중앙시장", "신설종합시장", "방이시장", "신월중앙시장", "영천시장", "용산용문시장", "동서시장", "송화벽화시장(송화골목시장)", "황학동벼룩시장", "동원전통종합시장(동원시장, 동원전통시장 상점가)", "봉천제일종합시장", "정릉아리랑시장", "답십리시장", "월정로시장", "인현시장", "영등포시장기계공구상가", "비단길현대시장(현대시장)", "신원시장", "답십리 건축자재시장", "논현종합시장", "목동깨비시장(목3동시장)", "전농로터리시장", "청량리청과물시장", "장미제일시장(중화동제일시장)", "능동로골목시장", "대신시장", "홍연시장", "약수시장", "동묘시장(동묘벼룩시장)", "방산종합시장(방산시장)", "마포농수산물시장", "남부골목시장(남부화곡시장, 남부시장)", "영동전통시장", "길동복조리시장", "신동시장", "인왕시장(홍제골목형상점가)", "사가정시장", "답십리현대시장", "이문제일시장", "강남개포시장", "경동시장", "이촌종합시장", "충신시장옆", "자양골목전통시장(자양골목시장)", "신정1동 골목시장(신정제일시장)", "만리시장", "수유전통시장(수유시장, 수유골목시장)", "금남시장", "세종마을음식문화거리(금천교시장)", "양재시민의숲역(양재동꽃시장, aT센터)", "동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)", "연서시장", "백운시장", "신사상가", "신영시장", "도곡시장", "강남골목시장", "청량리농수산물시장", "목2동시장", "전농1동주민센터(전농시장)", "삼구시장(로타리상가)", "강남시장(동작구 강남시장)", "통인시장", "영등포시장역 3번", "청량리종합시장", "낙원시장(낙원지하시장(대일상가))", "구로시장", "마전교지하쇼핑센터(구 한일상가)", "둔촌역전통시장", "동남상가", "동부시장", "수유재래시장", "흑석시장", "삼성동 시장(삼성동시장)", "남서울상가", "수유북부골목시장", "양남시장", "자양종합시장(기능상실)", "유영시장", "번동시장"],
-    datasets: [{ data: [100.0, 100.0, 100.0, 100.0, 100.0, 96.9, 84.2, 83.7, 78.8, 78.8, 78.2, 78.1, 76.9, 75.7, 75.1, 73.9, 73.5, 72.5, 71.0, 70.8, 70.4, 69.3, 69.2, 69.0, 68.8, 68.3, 67.7, 67.5, 66.7, 66.5, 66.4, 66.2, 65.7, 65.6, 65.0, 64.9, 64.6, 63.4, 63.2, 63.0, 62.9, 62.6, 62.5, 61.2, 61.2, 60.9, 60.3, 60.1, 59.6, 59.1, 58.6, 57.9, 57.5, 57.3, 57.2, 56.9, 56.8, 56.8, 56.4, 55.6, 55.6, 54.9, 54.1, 54.1, 54.0, 53.5, 53.5, 53.4, 51.9, 51.9, 51.4, 51.3, 51.0, 50.5, 50.5, 50.3, 50.2, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 49.8, 49.5, 49.0, 48.6, 47.9, 47.6, 47.5, 47.0, 46.8, 46.1, 45.1, 44.8, 44.8, 44.6, 44.5, 44.2, 44.1, 44.0, 43.8, 43.0, 42.6, 42.5, 42.5, 42.5, 42.2, 41.6, 41.6, 41.5, 40.1, 39.8, 39.4, 38.5, 38.4, 38.4, 38.2, 38.0, 37.4, 37.1, 37.1, 37.0, 36.9, 36.6, 36.6, 36.6, 36.6, 36.0, 35.9, 35.6, 35.5, 35.5, 35.0, 35.0, 34.9, 34.8, 34.4, 34.4, 34.4, 33.9, 33.8, 33.2, 33.1, 33.1, 31.1, 31.0, 30.6, 30.6, 30.6, 30.6, 30.4, 30.4, 30.1, 30.0, 30.0, 30.0, 29.9, 29.5, 29.4, 29.4, 29.4, 28.9, 28.8, 28.8, 28.8, 28.6, 28.5, 28.4, 28.1, 28.1, 27.9, 27.5, 26.9, 26.9, 26.9, 26.5, 26.2, 26.2, 26.0, 25.6, 25.6, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 24.1, 24.1, 24.1, 23.4, 23.4, 23.4, 23.4, 22.5, 22.5, 22.4, 21.6, 21.6, 21.6, 21.4, 20.9, 20.9, 20.9, 20.9, 20.1, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 19.9, 19.1, 19.1, 19.1, 19.1, 18.8, 18.4, 18.4, 18.4, 18.4, 18.4, 18.4, 18.4, 18.4, 17.5, 17.5, 17.5, 17.5, 17.5, 17.5, 17.1, 17.0, 16.6, 16.6, 16.6, 15.8, 15.0, 15.0, 15.0, 15.0, 14.2, 14.2, 14.2, 13.3, 12.5, 12.5, 12.5, 12.5, 12.0, 11.7, 11.7, 11.0, 10.8, 10.0, 8.3, 8.3, 8.3, 7.5, 5.8, 2.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], backgroundColor: ["#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11"], borderRadius: 3 }]
+    labels: ["증산골목시장", "석관시장", "공항시장역 3번", "공항시장", "용두시장", "중랑동부시장(중랑교종합상가)", "대원종합시장", "이경시장", "역촌중앙시장", "동대문상가C동", "봉천현대시장", "새석관시장", "강북북부시장", "가리봉시장", "청계천공구상가", "삼양골목시장(삼양시장)", "신노량진시장(기능상실)", "수유중앙골목시장(수유중앙시장)", "동문시장", "방천골목시장", "신신림시장(삼성동시장)", "한아름시장", "상계주공1단지(가)상가", "장위전통시장", "영진시장A동", "동진시장", "관악종합시장(신원시장)", "신곡종합시장(신월6동 골목시장)", "응암시장(신응암시장)", "신월3동 골목시장", "화곡중앙시장", "본동인정시장(기능상실)", "방학동도깨비시장", "미성동 도깨비시장 골목형상점가", "영신상가(제일상가)", "평화시장(남평화시장, 제일평화시장, 신평화패션타운)", "신정2동 골목시장(오목교중앙시장)", "강북북부골목시장", "테크노상가(엘리시움)", "보광시장", "개봉프라자(고척근린시장)", "남문시장", "봉일시장", "개봉중앙시장", "풍납시장", "동대문문구완구거리(동대문문구완구시장)", "조양시장", "동대문상가A동", "대명여울빛거리시장(대명시장)", "청평화시장", "동대문상가D동", "성내전통시장", "동평화시장", "제일시장", "모래내시장(서중시장)", "청량리전통시장", "양재시장", "아현시장", "마포시장", "충신시장", "남부종합시장", "영등포전통시장", "서울약령시장", "영천시장입구", "전곡시장", "숭인시장", "노룬산시장(노룬산골목시장)", "신도봉시장", "방신전통시장", "면목골목시장(면목시장)", "고분다리전통시장", "홍릉시장", "신수시장", "광장시장(광장전통시장)", "창신골목시장", "신림종합시장", "박미시장(기능상실)", "푸른터시장(기능상실)", "합정시장", "서교시장", "상계역전종합상가", "대림중앙시장", "중랑동부시장", "평화시장(통일상가, 동화상가)", "솔샘시장(미아6,7동골목시장)", "창동골목시장", "영등포청과시장(조광시장)", "노량진중앙시장", "가락시장역", "동대문패션타운 관광특구", "영일시장", "공덕시장", "신정3동 골목시장", "삼익패션타운(남대문시장)", "남대문시장(자유상가)", "강서농산물도매시장", "대림상가(청계상가)", "수일시장", "성동용답상가시장", "황학시장(서울중앙시장, 신중앙시장)", "고척근린시장", "신성시장(신성골목시장)", "마천중앙시장", "영진시장", "경창시장", "영동교골목시장", "우림시장", "동대문상가B동", "화곡본동시장", "오류시장", "인헌시장(원당종합시장)", "용산전자상가(용산역)", "장안제일시장", "우리시장", "영등포유통상가", "유진상가", "중부시장(신중부시장)", "오류2동버들시장", "밤나무골시장", "장미원골목시장", "영등포시장역 1번", "회기시장", "수유시장옆", "세운상가가동", "마천시장", "중곡제일시장(중곡제일골목시장, 광성시장)", "공릉동 도깨비시장", "청량종합도매시장", "은행나무시장", "명일전통시장", "묵1동도깨비시장", "조원동 펭귄시장(신림중앙시장)", "도림시장", "후암시장", "독산동 우시장", "종로신진시장", "등마루시장", "수유북부시장옆", "사당시장", "석촌시장", "망원시장", "경동광성상가(경동시장)", "자동차부품상가", "창동신창시장", "청량리수산시장", "백학시장", "마장축산물시장", "강북종합전통시장(강북종합골목시장)", "목사랑시장(목4동시장)", "백련시장", "숭례문수입상가(남대문시장)", "신월7동 골목시장(약수시장, 우성상가)", "강남시장(강남구 강남시장)", "상도전통시장", "관악중부시장", "행당시장상점가", "길음시장", "가락시장", "고척골목시장상점가(그라운드 고척)", "남구로시장", "시영2단지 무지개종합상가(중계 무지개2단지아파트상가)", "면곡골목시장", "한양대앞상점가(한양시장, 왕십리맛골목)", "태릉시장 특화거리", "이태원시장", "우림골목시장", "관악신사시장", "공항시장역 1번", "남성역골목시장", "포방터시장", "뚝도시장", "신림중앙시장(조원동 펭귄시장)", "상계중앙시장", "암사종합시장", "우이골목시장(우이시장)", "태능엔터피아(태릉시장)", "서울중앙시장(신중앙시장)", "정릉시장", "화양제일골목시장", "성대전통시장(성대시장)", "영림시장", "돈암시장(돈암제일시장)", "까치산시장", "시영B상가(중계 그린아파트 B 상가)", "쌍문시장(쌍문역골목시장)", "영등포청과시장교차로", "영등포시장역 4번", "대림골목시장(대림시장, 양지시장)", "신흥시장", "남성사계시장(남성시장)", "망원월드컵시장", "돌곶이시장(석관황금시장)", "증산종합시장", "신림현대종합상가", "청담삼익시장", "봉천중앙시장", "신설종합시장", "대조시장", "방이시장", "신월중앙시장", "영천시장", "용산용문시장", "동서시장", "송화벽화시장(송화골목시장)", "황학동벼룩시장", "동원전통종합시장(동원시장, 동원전통시장 상점가)", "봉천제일종합시장", "정릉아리랑시장", "답십리시장", "월정로시장", "인현시장", "영등포시장기계공구상가", "새마을시장", "비단길현대시장(현대시장)", "신원시장", "답십리 건축자재시장", "논현종합시장", "목동깨비시장(목3동시장)", "전농로터리시장", "청량리청과물시장", "장미제일시장(중화동제일시장)", "능동로골목시장", "대신시장", "홍연시장", "약수시장", "동묘시장(동묘벼룩시장)", "방산종합시장(방산시장)", "남부골목시장(남부화곡시장, 남부시장)", "영동전통시장", "길동복조리시장", "신동시장", "인왕시장(홍제골목형상점가)", "사가정시장", "답십리현대시장", "연서시장", "신사상가", "이문제일시장", "강남개포시장", "경동시장", "이촌종합시장", "충신시장옆", "자양골목전통시장(자양골목시장)", "신정1동 골목시장(신정제일시장)", "만리시장", "수유전통시장(수유시장, 수유골목시장)", "금남시장", "세종마을음식문화거리(금천교시장)", "양재시민의숲역(양재동꽃시장, aT센터)", "동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)", "백운시장", "마포농수산물시장", "신영시장", "도곡시장", "강남골목시장", "청량리농수산물시장", "목2동시장", "전농1동주민센터(전농시장)", "삼구시장(로타리상가)", "강남시장(동작구 강남시장)", "통인시장", "영등포시장역 3번", "청량리종합시장", "낙원시장(낙원지하시장(대일상가))", "구로시장", "마전교지하쇼핑센터(구 한일상가)", "둔촌역전통시장", "동남상가", "동부시장", "수유재래시장", "흑석시장", "삼성동 시장(삼성동시장)", "남서울상가", "수유북부골목시장", "양남시장", "자양종합시장(기능상실)", "유영시장", "번동시장"],
+    datasets: [{ data: [100.0, 100.0, 100.0, 100.0, 96.9, 84.2, 83.7, 82.6, 78.8, 78.8, 78.2, 76.9, 75.2, 75.1, 73.9, 73.5, 71.0, 70.4, 69.2, 69.0, 68.8, 68.7, 68.3, 67.7, 67.5, 67.3, 67.0, 66.7, 66.5, 66.2, 65.7, 65.0, 64.9, 64.6, 63.4, 63.2, 63.0, 62.9, 62.6, 62.5, 61.2, 60.9, 60.6, 60.5, 60.3, 60.1, 59.8, 59.6, 58.6, 57.9, 57.5, 57.2, 56.9, 56.8, 56.5, 56.4, 55.6, 55.6, 54.9, 54.1, 54.1, 54.0, 53.5, 53.5, 53.4, 53.3, 52.8, 52.5, 51.9, 51.9, 51.4, 51.0, 50.5, 50.5, 50.2, 50.0, 50.0, 50.0, 50.0, 50.0, 50.0, 49.8, 49.5, 49.0, 48.6, 47.9, 47.6, 47.5, 47.0, 46.8, 46.3, 46.1, 45.1, 44.8, 44.8, 44.6, 44.5, 44.2, 44.1, 44.0, 43.8, 43.0, 42.6, 42.5, 42.5, 42.5, 42.2, 41.6, 41.6, 41.5, 41.0, 40.1, 39.8, 39.4, 38.5, 38.4, 38.2, 38.0, 37.4, 37.1, 37.1, 37.0, 36.9, 36.6, 36.6, 36.6, 36.6, 36.0, 35.9, 35.6, 35.5, 35.0, 35.0, 34.9, 34.8, 34.4, 34.4, 34.4, 33.9, 33.8, 33.5, 33.2, 33.1, 33.1, 31.1, 31.0, 30.7, 30.6, 30.6, 30.6, 30.4, 30.4, 30.1, 30.0, 30.0, 30.0, 29.9, 29.5, 29.4, 29.4, 28.9, 28.8, 28.8, 28.8, 28.6, 28.6, 28.5, 28.4, 28.1, 28.1, 28.1, 27.9, 27.5, 26.9, 26.9, 26.9, 26.5, 26.2, 26.2, 26.0, 25.6, 25.6, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 24.1, 24.1, 24.1, 23.5, 23.4, 23.4, 23.4, 23.4, 22.8, 22.5, 22.5, 22.4, 21.6, 21.6, 21.6, 21.4, 20.9, 20.9, 20.9, 20.9, 20.1, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 19.9, 19.1, 19.1, 19.1, 19.1, 18.8, 18.4, 18.4, 18.4, 18.4, 18.4, 18.4, 18.4, 17.8, 17.8, 17.5, 17.5, 17.5, 17.5, 17.5, 17.5, 17.1, 17.0, 16.6, 16.6, 16.6, 15.8, 15.0, 15.0, 14.7, 14.2, 14.2, 14.2, 13.3, 12.5, 12.5, 12.5, 12.5, 12.0, 11.7, 11.7, 11.0, 10.8, 10.0, 8.3, 8.3, 8.3, 7.5, 5.8, 2.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], backgroundColor: ["#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#e34948", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#2a78d6", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11", "#3b6d11"], borderRadius: 3 }]
   },
   options: {
     indexAxis: 'y',
