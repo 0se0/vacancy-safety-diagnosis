@@ -16,6 +16,15 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 YEARS = ['2021', '2022', '2023', '2024', '2025']
 
+# 2026-09-17: TARGET_MARKETS를 277개로 넓히면서 발견한 결함 - 점포수가 이미
+# 거의 0에 가까운(사실상 폐쇄된) 상권은 순증감률이 0%나 왔다갔다하는 작은
+# 정수 사이의 변화라 오히려 "안정적"으로 보여서 저위험으로 분류됐다
+# (예: "자양종합시장(기능상실)" latest_total=7, 순증감 0% -> 저위험 오분류).
+# closure_risk_classifier.py가 이미 같은 이유로 MIN_STOR=20을 쓰고 있어서
+# 그 값을 그대로 맞췄다 - 최근 점포수가 이 미만이면 %변화 자체가 통계적으로
+# 무의미하다고 보고 "데이터부족"으로 별도 분류(저위험으로 자동 편입 안 함).
+MIN_ACTIVE_STORES = 20
+
 # 노후 대형상가/전통시장 리스트. 10개 -> 48개(수작업 큐레이션) -> 277개(2026-09-07,
 # 상권분석서비스 CSV 전체에서 상권명에 "시장" 또는 "상가"가 들어간 상권 전부 + 이름은
 # 안 걸리지만 기존에 이미 포함돼 있던 항목까지 합집합)로 확장.
@@ -381,7 +390,13 @@ def analyze():
     # 공실위험 요약 (순감소율이 클수록 위험 높음)
     summary = []
     for name, d in result_markets.items():
-        if d['net_change_pct'] <= -7:
+        latest_total = d['total_stores'][-1]
+        low_activity = latest_total < MIN_ACTIVE_STORES
+        if low_activity:
+            # 표본이 너무 작아 %변화가 신호가 아니라 노이즈 - 안전 쪽으로 자동
+            # 분류하지 않고 별도 카테고리로 뺀다 (현장 확인 필요, 저위험 아님)
+            risk = '데이터부족'
+        elif d['net_change_pct'] <= -7:
             risk = '고위험'
         elif d['net_change_pct'] <= -3:
             risk = '중위험'
@@ -390,9 +405,10 @@ def analyze():
         summary.append({
             'name': name,
             'net_change_pct': d['net_change_pct'],
-            'latest_total': d['total_stores'][-1],
+            'latest_total': latest_total,
             'recent_close_rate_avg': d['recent_close_rate_avg'],
             'risk_level': risk,
+            'low_activity': low_activity,
         })
     summary.sort(key=lambda x: x['net_change_pct'])
 
@@ -440,7 +456,10 @@ def generate(result: dict) -> str:
     # 차트용 데이터 (상권명, 순증감률) - 순증감률 오름차순(가장 위험한 것부터)
     bar_labels = json.dumps([s['name'] for s in summary], ensure_ascii=False)
     bar_values = json.dumps([s['net_change_pct'] for s in summary])
-    bar_colors = json.dumps(['#e34948' if s['risk_level'] == '고위험' else '#2a78d6' for s in summary])
+    bar_colors = json.dumps([
+        '#898781' if s['risk_level'] == '데이터부족' else ('#e34948' if s['risk_level'] == '고위험' else '#2a78d6')
+        for s in summary
+    ])
 
     # 상위 4개 위험 상권의 분기별 점포수 추이 (라인차트용)
     top4 = summary[:4]
@@ -459,7 +478,8 @@ def generate(result: dict) -> str:
 
     rows_html = ""
     for s in summary:
-        risk_class = {'고위험': 'risk-high', '중위험': 'risk-mid', '저위험': 'risk-low'}[s['risk_level']]
+        risk_class = {'고위험': 'risk-high', '중위험': 'risk-mid', '저위험': 'risk-low',
+                      '데이터부족': 'risk-unknown'}[s['risk_level']]
         spark = _sparkline_svg(markets[s['name']]['total_stores'])
         rows_html += f"""<tr>
             <td>{s['name']}</td>
@@ -498,6 +518,7 @@ def generate(result: dict) -> str:
   .risk-high {{ color: #e34948; font-weight: 600; }}
   .risk-mid {{ color: #d97706; font-weight: 600; }}
   .risk-low {{ color: #2a78d6; font-weight: 600; }}
+  .risk-unknown {{ color: #898781; font-weight: 600; }}
   .note {{ font-size: 11px; color: #898781; margin-top: 1.5rem; line-height: 1.6; }}
 </style>
 </head>
@@ -561,7 +582,11 @@ def generate(result: dict) -> str:
 ※ 방법론: 각 상권의 분기별 총점포수(모든 업종 합산) 추이를 2021년 1분기 대비 2025년 4분기로 비교해 순증감률을 계산.<br>
  -7% 이상 감소는 고위험, -3~-7%는 중위험, 그 외 저위험으로 분류(임계값은 노후 대형상가
 {n_total}곳 표본의 분포에 기반한 기준이며 향후 더 많은 상권으로 검증 시 조정 가능).<br> 최근4분기 평균폐업률은 직전
-4개 분기의 (폐업점포수/총점포수) 평균. 데이터: 서울시 우리마을가게 상권분석서비스(상권-점포)
+4개 분기의 (폐업점포수/총점포수) 평균. 데이터: 서울시 우리마을가게 상권분석서비스(상권-점포)<br>
+※ "데이터부족": 최근 분기 점포수가 {MIN_ACTIVE_STORES}개 미만인 상권. 이미 사실상 활동이 없는 곳은
+점포수 1~2개 사이 등락만으로 순증감률이 크게 흔들려(예: 2개→1개=-50%, 1개→2개=+100%)
+"저위험"으로 잘못 분류될 수 있어 별도로 뺌 — 안정적인 게 아니라 판단할 근거 자체가 부족한
+것이므로 현장 확인이 더 필요한 쪽에 가깝다.
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>

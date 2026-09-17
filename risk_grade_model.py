@@ -26,11 +26,18 @@ alt_vacancy_indicator.py에서 나온 두 지표(점포수 순증감률, 최근4
   확장된 277개 쪽에서 온 나머지 2곳은 제외했다. 25곳만 반영해 총 8+25=33/277곳.
   나머지는 (a) 매칭됐지만 에너지 데이터 자체가 없거나(스킵됨) (b) 이름이 겹쳐
   안전 매칭 조건을 못 채운 경우다.
+  ★★ 2026-09-17: market_energy_matching_by_coords.py로 "건물명 매칭"이 아니라
+  "좌표 반경 150m 안에 건물이 유일할 때"로 매칭 방식을 바꿔 나머지 138곳에
+  재시도했으나 1곳만 추가 확보됐다("답십리 건축자재시장", 거리 105.8m). 반경
+  안에 건물이 하나뿐이어야 채택하는 안전장치가 시장 밀집지역에서는 대부분
+  실패하기 때문 - 애초에 "시장"은 여러 건물이 몰린 곳이라는 정의상, 150m 반경에
+  건물이 하나만 있는 경우가 오히려 드물다. 반경을 넓히면 매칭 수는 늘겠지만
+  오매칭 위험이 그만큼 커지므로 여기서 멈춤. 33 -> 34/277곳.
   MARKET_ENERGY_TREND에 없는 상권은 기존 2지표(점포수+폐업률) 방식 그대로 등급이
   매겨짐.
 """
 
-from alt_vacancy_indicator import analyze
+from alt_vacancy_indicator import MIN_ACTIVE_STORES, analyze
 
 # 33곳만 안전하게 매칭됨(위 설명 참고). 값 = 전기사용량 전반기(2024.01~2025.01)
 # 대비 후반기(2025.02~2025.12) 평균 순증감률(%). energy_vacancy_indicator.py의
@@ -73,6 +80,8 @@ MARKET_ENERGY_TREND = {
     "증산종합시장": 1.7,
     "한아름시장": -7.2,
     "관악종합시장(신원시장)": -5.0,
+    # 4차 매칭 (2026-09-17, 좌표 반경 150m 매칭 - market_energy_matching_by_coords.py)
+    "답십리 건축자재시장": 28.6,
 }
 
 
@@ -130,6 +139,15 @@ def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float =
     서로 안 어긋남. 이제 등급 개수도 실제 심각도에 따라 다르게 나옴 (강제로 4등분 안 함)
 
     등급 기준: 60점 이상 D(최우선점검), 40~60 C, 20~40 B, 20미만 A
+
+    ★ 2026-09-17: latest_total(최근 분기 점포수)이 MIN_ACTIVE_STORES 미만인
+    상권은 위 점수식을 그대로 적용하지 않고 등급을 D로 강제한다. 점포수가
+    거의 0인 상권은 순증감률이 작은 정수 사이의 등락(2->1개=-50% 등)이라
+    점수식이 우연히 낮은 위험점수를 뱉을 수 있는데, 그게 "안정적"이라는
+    뜻이 아니라 "판단 근거가 부족하다"는 뜻이라 오히려 우선 확인 대상으로
+    분류하는 게 맞다(alt_vacancy_indicator.py의 risk_level='데이터부족'과
+    같은 원칙). 이 경우 risk_score는 참고용으로 그대로 계산해서 남겨두되
+    등급만 덮어쓴다.
     """
     summary = result['summary']
 
@@ -149,7 +167,10 @@ def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float =
             energy_score = None
             risk_score = round(w_vacancy * decline_score + w_closure * closure_score, 1)
 
-        if risk_score >= 60:
+        low_activity = s['latest_total'] < MIN_ACTIVE_STORES
+        if low_activity:
+            grade = "D"
+        elif risk_score >= 60:
             grade = "D"
         elif risk_score >= 40:
             grade = "C"
@@ -165,6 +186,7 @@ def compute_risk_grades(result: dict, w_vacancy: float = 0.5, w_closure: float =
             "energy_trend_pct": energy_trend,
             "risk_score": risk_score,
             "grade": grade,
+            "low_activity": low_activity,
         })
     rows.sort(key=lambda r: r['risk_score'], reverse=True)
     return rows
@@ -202,6 +224,7 @@ GRADE_DESC = {
 
 def generate(rows: list) -> str:
     n_total = len(rows)
+    min_active_stores = MIN_ACTIVE_STORES
     grade_counts = {"A": 0, "B": 0, "C": 0, "D": 0}
     for r in rows:
         grade_counts[r["grade"]] += 1
@@ -216,6 +239,7 @@ def generate(rows: list) -> str:
     for r in rows:
         color = GRADE_COLOR[r["grade"]]
         energy_cell = f"{r['energy_trend_pct']:+.1f}%" if r.get("energy_trend_pct") is not None else "<span style=\"color:#c8c6bf;\">-</span>"
+        desc = "데이터부족 (현장확인 필요)" if r.get("low_activity") else GRADE_DESC[r['grade']]
         rows_html += f"""<tr>
             <td>{r['name']}</td>
             <td style="text-align:center;"><span class="grade-badge" style="background:{color};">{r['grade']}</span></td>
@@ -223,7 +247,7 @@ def generate(rows: list) -> str:
             <td>{r['net_change_pct']:+.1f}%</td>
             <td>{r['recent_close_rate_avg']}%</td>
             <td>{energy_cell}</td>
-            <td style="color:{color};font-weight:600;">{GRADE_DESC[r['grade']]}</td>
+            <td style="color:{color};font-weight:600;">{desc}</td>
         </tr>"""
 
     return f"""<!DOCTYPE html>
@@ -310,7 +334,11 @@ def generate(rows: list) -> str:
 4등분으로 강제되지 않고 실제 심각도 분포에 따라 달라진다.<br> 노후 대형상가 {n_total}곳 실측 분석 결과
 D등급 {grade_counts['D']}곳·C등급 {grade_counts['C']}곳·B등급 {grade_counts['B']}곳·A등급 {grade_counts['A']}곳으로 분류됐다.<br>
 데이터: 서울시 우리마을가게 상권분석서비스(2021~2025), 소상공인 상가정보 API + 한국전력 전기사용량 통계(2024~2025).
-전력사용량 매칭 범위(현재 18개구)를 넓히면 나머지 상권에도 적용할 수 있다.
+전력사용량은 서울 25개구 전체를 스캔하되 상권명이 건물명과 구 안에서 유일하게 매칭되는 경우만 안전하게
+반영({n_with_energy}곳) — 매칭 로직 자체를 완화하지 않는 한 이 수는 크게 늘리기 어렵다.<br>
+※ 최근 분기 점포수가 {min_active_stores}개 미만인 상권은 위 점수식과 무관하게 D등급으로 처리한다 —
+점포수가 거의 0인 곳은 작은 정수 사이의 등락만으로 위험점수가 우연히 낮게 나올 수 있는데,
+이건 "안정적"이 아니라 "판단 근거가 부족하다"는 뜻이라 오히려 우선 확인 대상으로 분류한다.
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>

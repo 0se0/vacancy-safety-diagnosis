@@ -230,6 +230,7 @@ def generate(rows: list) -> str:
             "name": r["name"], "grade": r["grade"], "score": r["risk_score"],
             "net_change": r["net_change_pct"], "close_rate": r["recent_close_rate_avg"],
             "lat": lat, "lng": lng, "district": district, "color": GRADE_COLOR[r["grade"]],
+            "low_activity": bool(r.get("low_activity")),
         })
 
     markers_json = json.dumps(markers, ensure_ascii=False)
@@ -381,7 +382,8 @@ markers.forEach(m => {{
     fillOpacity: 0.9,
   }}).addTo(map);
   // 폐업률(close_rate)·자치구(district)를 팝업에 추가 표시
-  circle.bindPopup(`<b>[${{m.grade}}] ${{m.name}}</b><br>${{m.district}} · 위험점수 ${{m.score}} · 순증감 ${{m.net_change}}%<br>최근4분기 평균폐업률 ${{m.close_rate}}%`);
+  const lowActivityNote = m.low_activity ? '<br><span style="color:#898781;">⚠ 데이터부족(점포수 극소) - 현장확인 필요, 안정적이라는 뜻 아님</span>' : '';
+  circle.bindPopup(`<b>[${{m.grade}}] ${{m.name}}</b><br>${{m.district}} · 위험점수 ${{m.score}} · 순증감 ${{m.net_change}}%<br>최근4분기 평균폐업률 ${{m.close_rate}}%${{lowActivityNote}}`);
   circleByMarker.push({{ marker: m, circle }});
 }});
 
