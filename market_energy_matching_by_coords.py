@@ -26,6 +26,13 @@ geocode_missing_markets.py로 171개 상권에 위경도를 확보해뒀으니, 
   전에 반드시 좌표-주소 대조로 육안 검증할 것(이전에 이름 매칭에서 "화곡중앙시장"
   ="신월중앙시장" 같은 오매칭이 실제로 나온 적 있음).
 
+★ 2026-09-23: 1차 시도(반경 안 건물 유일)는 138곳 중 1곳만 성공했다 - 시장은
+  애초에 건물이 몰려 있는 곳이라 "반경 안 유일"이 거의 안 나오기 때문. 그래서
+  match_by_radius_and_name()을 추가했다: 반경 안에 건물이 여러 개 있어도 그중
+  건물명이 상권 코어명과 겹치는 게 "정확히 1개"면 채택한다. 좌표(근접)와
+  이름(부분일치) 두 신호를 AND로 요구하므로, 반경 조건 자체는 완화됐지만
+  어느 한쪽 신호만 보는 것보다 오히려 더 안전하다(둘 다 맞아야 통과).
+
 돌리는 법:
   python market_energy_matching_by_coords.py
   (25개구 전수 스캔이라 몇 분 걸림)
@@ -40,6 +47,7 @@ import requests
 from dotenv import load_dotenv
 
 from energy_vacancy_indicator import load_energy_usage
+from market_energy_matching import core_name
 from risk_grade_model import MARKET_ENERGY_TREND
 from safety_map import MARKET_COORDS
 from seoul_districts import SEOUL_GU_CODES
@@ -139,6 +147,52 @@ def match_by_radius(gu_stores: dict) -> dict:
     return matched
 
 
+def match_by_radius_and_name(gu_stores: dict, already_matched: set) -> dict:
+    """
+    match_by_radius()의 완화판: 반경 RADIUS_M 안에 건물이 여러 개 있어도, 그중
+    건물명이 상권 코어명과 겹치는 게 "정확히 1개"면 채택한다. 시장은 원래
+    반경 안에 건물이 여럿이라 "반경 안 유일"이 거의 안 나온다는 게 1차 시도에서
+    확인됐다(138곳 중 1곳) - 좌표(근접)와 이름(부분일치)이라는 두 신호를 AND로
+    겹치면, 반경 조건은 완화하면서도 어느 신호 하나만 볼 때보다 오히려 더
+    안전하다(둘 다 맞아야 채택되므로).
+    반환: {상권명: (road_key, 거리(m), 반경 안 전체 후보 건물 수, gu)}
+    """
+    matched = {}
+    for market, (lat, lng, gu) in MARKET_COORDS.items():
+        if market in already_matched:
+            continue
+        if gu not in gu_stores:
+            continue
+        core = core_name(market)
+        if len(core) < 3:
+            continue
+        all_in_radius = set()
+        name_candidates = {}  # key -> (거리, 건물명)
+        for s in gu_stores[gu]:
+            s_lat, s_lon = s.get("lat"), s.get("lon")
+            if s_lat is None or s_lon is None:
+                continue
+            rd, bb, bu = s.get("rdnmCd"), s.get("bldMnno"), s.get("bldSlno")
+            if not rd or bb in (None, ""):
+                continue
+            try:
+                dist = haversine_m(lat, lng, float(s_lat), float(s_lon))
+            except (TypeError, ValueError):
+                continue
+            if dist > RADIUS_M:
+                continue
+            key = (rd, int(bb), int(bu) if bu not in (None, "") else 0)
+            all_in_radius.add(key)
+            nm = (s.get("bldNm") or "").strip()
+            if len(nm) >= 3 and (core in nm or nm in core):
+                if key not in name_candidates or dist < name_candidates[key][0]:
+                    name_candidates[key] = (dist, nm)
+        if len(name_candidates) == 1:
+            key, (dist, nm) = list(name_candidates.items())[0]
+            matched[market] = (key, round(dist, 1), len(all_in_radius), gu, nm)
+    return matched
+
+
 if __name__ == "__main__":
     print(f"=== 1단계: 서울 25개구 전수 스캔 (반경 {RADIUS_M}m 매칭용) ===")
     gu_stores = {}
@@ -150,9 +204,17 @@ if __name__ == "__main__":
 
     print(f"\n=== 2단계: 좌표 반경 {RADIUS_M}m 매칭 (반경 안 건물 유일할 때만) ===")
     matched = match_by_radius(gu_stores)
-    print(f"매칭 성공: {len(matched)}곳 (이미 이름매칭으로 확보된 {len(MARKET_ENERGY_TREND)}곳은 제외 대상에서 스캔 안 함)")
+    print(f"매칭 성공: {len(matched)}곳 (이미 이름매칭으로 확보된 {len(MARKET_ENERGY_TREND)}곳은 스캔 안 함)")
     for m, (key, dist, n_cand, gu) in matched.items():
         print(f"  {m:40s} -> key={key} 거리={dist}m ({gu})")
+
+    print(f"\n=== 2-2단계: 반경 {RADIUS_M}m + 건물명 일치 결합 매칭 (반경 안 여러 건물 허용) ===")
+    already = set(MARKET_ENERGY_TREND.keys()) | set(matched.keys())
+    matched_by_name = match_by_radius_and_name(gu_stores, already)
+    print(f"매칭 성공: {len(matched_by_name)}곳")
+    for m, (key, dist, n_total, gu, nm) in matched_by_name.items():
+        print(f"  {m:40s} -> {nm} key={key} 거리={dist}m (반경 안 전체 {n_total}개 중 이름일치 1개, {gu})")
+        matched[m] = (key, dist, n_total, gu)
 
     print("\n=== 3단계: 에너지 사용량 조인 + 추세 계산 ===")
     usage = load_energy_usage(signgu_codes=SEOUL_GU_CODES.keys())
