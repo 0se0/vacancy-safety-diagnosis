@@ -23,7 +23,7 @@ import os
 from dataclasses import dataclass
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
+HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html")
 
 
 # 1. 샘플 데이터 (실제 API 응답을 흉내낸 가상 데이터 — 표기 불일치를 의도적으로 포함)

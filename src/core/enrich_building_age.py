@@ -39,12 +39,12 @@ SERVICE_KEY_BUILDING = os.environ.get("BUILDING_API_KEY", "")
 BUILDING_BASE = "https://apis.data.go.kr/1613000/BldRgstHubService"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CVS_DIR = os.path.join(BASE_DIR, "cvs")
+CVS_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs")
 BJDONG_CODE_FILE_CANDIDATES = [
-    os.path.join(BASE_DIR, "국토교통부_전국_법정동_20260630.csv"),
+    os.path.join(os.path.dirname(BASE_DIR), "국토교통부_전국_법정동_20260630.csv"),
     os.path.join(CVS_DIR, "국토교통부_전국_법정동_20260630.csv"),
-    os.path.join(BASE_DIR, "법정동코드_전체자료.txt"),
-    os.path.join(BASE_DIR, "법정동코드_전체자료.csv"),
+    os.path.join(os.path.dirname(BASE_DIR), "법정동코드_전체자료.txt"),
+    os.path.join(os.path.dirname(BASE_DIR), "법정동코드_전체자료.csv"),
     os.path.join(CVS_DIR, "법정동코드_전체자료.txt"),
     os.path.join(CVS_DIR, "법정동코드_전체자료.csv"),
 ]

@@ -49,9 +49,9 @@ SERVICE_KEY_SANGGA = os.environ.get("SANGGA_API_KEY", "")
 SANGGA_BASE = "https://apis.data.go.kr/B553077/api/open/sdsc2"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CVS_DIR = os.path.join(BASE_DIR, "cvs")
-CVS2_DIR = os.path.join(BASE_DIR, "cvs2")
-HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
+CVS_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs")
+CVS2_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs2")
+HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html")
 LEDGER_PATHS = [
     os.path.join(CVS2_DIR, "건축물대장_표제부_8개구_전체.csv"),
     os.path.join(CVS2_DIR, "건축물대장_표제부_17개구_전체.csv"),

@@ -242,60 +242,64 @@ BUILDING_API_KEY= # 국토교통부 건축HUB API
 스크립트 간 실행 순서를 강제하는 장치는 없으므로 아래 순서를 사람이 지켜서
 실행해야 합니다. 괄호 안은 각 단계가 만드는 산출물입니다.
 
-모든 스크립트는 `src/` 아래에 있으며, 산출물 `html/`은 저장소 루트에 별도로 분리되어
-있습니다(스크립트가 실행 위치와 무관하게 `src/`의 부모 폴더를 자동으로 찾아 씁니다).
+`src/`는 기능 단위로 세 폴더로 나뉘어 있습니다: 서로 얽혀 있는 핵심 파이프라인
+13개는 `src/core/`, 폐업위험 모델 계열(자기들끼리만 참조) 3개는 `src/closure_models/`,
+다른 어떤 파일과도 import로 얽히지 않는 5개는 `src/standalone/`에 있습니다.
+`src/cvs/`, `src/cvs2/`는 세 폴더가 공유하는 원본 데이터라 `src/` 바로 아래에 있고,
+산출물 `html/`은 저장소 루트에 분리되어 있습니다(스크립트가 실행 위치와 무관하게
+자기 파일 기준 상대경로로 두 폴더를 자동으로 찾아 씁니다).
 
 **체인 A — 실측 검증 → 건물연식 보강 → 의심건물 스크리닝**
 ```
-python src/verification_scan.py          # src/cvs/verification_log.csv
-python src/enrich_building_age.py        # src/cvs/verification_log_with_age.csv
-python src/suspicious_building_ranking.py
+python src/core/verification_scan.py               # src/cvs/verification_log.csv
+python src/core/enrich_building_age.py              # src/cvs/verification_log_with_age.csv
+python src/standalone/suspicious_building_ranking.py
 ```
 
 **체인 B — 점포수 지표 → 안전등급 → 지도**
 ```
-python src/alt_vacancy_indicator.py      # (risk_grade_model.py가 analyze() 재사용)
-python src/market_energy_matching.py     # TARGET_MARKETS를 상가정보 API 건물명과 구 단위로 안전
+python src/core/alt_vacancy_indicator.py      # (risk_grade_model.py가 analyze() 재사용)
+python src/core/market_energy_matching.py     # TARGET_MARKETS를 상가정보 API 건물명과 구 단위로 안전
                                       # 매칭해 전력사용량 추세 추출 (선택 — 출력된 코드를
                                       # risk_grade_model.py의 MARKET_ENERGY_TREND에 수동으로
                                       # 반영해야 함. 동일 건물에 여러 상권명이 매칭될 수 있어
                                       # 그대로 붙여넣지 말고 검토 필요)
-python src/market_energy_matching_by_coords.py  # 위에서 매칭 안 된 나머지를 건물명 대신 좌표
+python src/core/market_energy_matching_by_coords.py  # 위에서 매칭 안 된 나머지를 건물명 대신 좌표
                                       # 반경(150m)으로 재시도 (선택 — geocode_missing_markets.py로
                                       # 좌표를 먼저 채워야 의미 있음. 반경 안 건물이 유일한
                                       # 경우만 채택하는데 시장은 대개 건물이 몰려 있어서
                                       # 수확이 적을 수 있음 - 실측 138곳 중 1곳)
-python src/risk_grade_model.py           # (safety_map.py가 compute_risk_grades() 재사용)
-python src/geocode_missing_markets.py    # TARGET_MARKETS 중 safety_map.py의 MARKET_COORDS에 없는
+python src/core/risk_grade_model.py           # (safety_map.py가 compute_risk_grades() 재사용)
+python src/core/geocode_missing_markets.py    # TARGET_MARKETS 중 safety_map.py의 MARKET_COORDS에 없는
                                       # 상권만 OSM Nominatim으로 지오코딩 (선택 — 좌표 다 채운
                                       # 뒤엔 안 돌려도 됨, 새 상권 추가될 때만 재실행)
-python src/safety_map.py
+python src/core/safety_map.py
 ```
 
 **체인 C — 에너지 지표 (전기/가스 사용량)**
 ```
-python src/energy_vacancy_indicator.py   # 25개구 상가 스캔(구당 상한 있음) + 에너지 조인 + 상관관계
+python src/core/energy_vacancy_indicator.py   # 25개구 상가 스캔(구당 상한 있음) + 에너지 조인 + 상관관계
 ```
 
 **체인 D — 공실 후보 전수 스크리닝 → 에너지 3중검증**
 ```
-python src/commercial_vacancy_screening.py   # src/cvs/vacancy_candidates.csv (서울 25개구 전수 차집합)
-python src/link_candidates_to_energy.py      # 위 후보를 새주소코드 확보 후 에너지와 조인
+python src/core/commercial_vacancy_screening.py   # src/cvs/vacancy_candidates.csv (서울 25개구 전수 차집합)
+python src/core/link_candidates_to_energy.py      # 위 후보를 새주소코드 확보 후 에너지와 조인
                                           # (일일 API 호출한도로 여러 회차에 걸쳐 이어 실행될 수 있음.
                                           #  재실행 시 이미 해결된 후보는 자동으로 건너뜀)
 ```
 
 **독립 실행 (서로 의존관계 없음)**
 ```
-python src/dashboard.py
-python src/clustering.py
-python src/industrial_vacancy_indicator.py
-python src/closure_risk_classifier.py
-python src/vacancy_matching_poc.py
-python src/anomaly_detection.py       # closure_risk_classifier.py 실행 후 - 같은 데이터로 RF vs
+python src/standalone/dashboard.py
+python src/standalone/clustering.py
+python src/standalone/industrial_vacancy_indicator.py
+python src/closure_models/closure_risk_classifier.py
+python src/standalone/vacancy_matching_poc.py
+python src/closure_models/anomaly_detection.py   # closure_risk_classifier.py 실행 후 - 같은 데이터로 RF vs
                                    # Isolation Forest 비교 (closure_risk_classifier.py의
                                    # load_panel/build_features/FEATURES 재사용)
-python src/data_quality_report.py     # 체인 B(alt_vacancy_indicator, risk_grade_model,
+python src/core/data_quality_report.py     # 체인 B(alt_vacancy_indicator, risk_grade_model,
                                    # safety_map) 실행 후 - MARKET_COORDS/MARKET_ENERGY_TREND
                                    # 정합성·근접좌표 자동 검사
 ```

@@ -42,7 +42,7 @@ def analyze():
     verification_log_with_age.csv가 있으면 건물연식을 병합해 v2.0 점수를,
     없으면 v1.0(격차+배율 50:50) 점수를 산출.
     """
-    path = os.path.join(BASE_DIR, "cvs", "verification_log.csv")
+    path = os.path.join(os.path.dirname(BASE_DIR), "cvs", "verification_log.csv")
     df = pd.read_csv(path, encoding="utf-8-sig")
 
     mismatched = df[df["비고"] == "불일치(등록<실제)"].copy()
@@ -69,7 +69,7 @@ def analyze():
 
     mismatched["규모구분"] = mismatched["실제영업중수"].apply(scale_label)
 
-    age_path = os.path.join(BASE_DIR, "cvs", "verification_log_with_age.csv")
+    age_path = os.path.join(os.path.dirname(BASE_DIR), "cvs", "verification_log_with_age.csv")
     has_age = os.path.exists(age_path)
 
     if has_age:
@@ -279,8 +279,8 @@ new Chart(document.getElementById('barChart'), {{
 if __name__ == "__main__":
     result = analyze()
     html = generate(result)
-    os.makedirs(os.path.join(os.path.dirname(BASE_DIR), "html"), exist_ok=True)
-    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", "역산공실탐지기반_의심건물스크리닝.html")
+    os.makedirs(os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html"), exist_ok=True)
+    output_path = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html", "역산공실탐지기반_의심건물스크리닝.html")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"\nHTML 생성 완료: {output_path}")

@@ -399,7 +399,7 @@ if __name__ == "__main__":
     print("\n등급별 분포:", grade_counts)
 
     html = generate(rows)
-    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", "역산공실탐지기반_안전등급모델.html")
+    output_path = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html", "역산공실탐지기반_안전등급모델.html")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"\nHTML 생성 완료: {output_path}")

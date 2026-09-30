@@ -56,7 +56,7 @@ from closure_risk_classifier import (
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
+HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html")
 
 CONTAMINATION = 0.048  # RF 라벨의 실측 위험비율(4.8%)과 맞춤 - 공정 비교를 위해
 

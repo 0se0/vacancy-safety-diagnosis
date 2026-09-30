@@ -322,7 +322,7 @@ COLUMN_MAP = {
 
 
 def _read_year(year: str) -> pd.DataFrame:
-    path = os.path.join(BASE_DIR, "cvs", f'서울시_상권분석서비스_점포-상권__{year}년.csv')
+    path = os.path.join(os.path.dirname(BASE_DIR), "cvs", f'서울시_상권분석서비스_점포-상권__{year}년.csv')
     df = pd.read_csv(path, encoding='cp949')
     df = df.rename(columns=COLUMN_MAP)
     return df[['stdr_yyqu_cd', 'trdar_cd_nm', 'stor_co', 'opbiz_stor_co', 'clsbiz_stor_co']]
@@ -644,7 +644,7 @@ if __name__ == '__main__':
               f"최근 점포수 {s['latest_total']}개  최근4분기 평균폐업률 {s['recent_close_rate_avg']}%  [{s['risk_level']}]")
 
     html = generate(result)
-    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", '역산공실탐지기반_대안알고리즘.html')
+    output_path = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html", '역산공실탐지기반_대안알고리즘.html')
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print(f"\nHTML 생성 완료: {output_path}")

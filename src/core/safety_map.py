@@ -421,8 +421,8 @@ if __name__ == "__main__":
     result = analyze()
     rows = compute_risk_grades(result)
     html = generate(rows)
-    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", "역산공실탐지기반_안전등급지도.html")
-    os.makedirs(os.path.join(os.path.dirname(BASE_DIR), "html"), exist_ok=True)
+    output_path = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html", "역산공실탐지기반_안전등급지도.html")
+    os.makedirs(os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html"), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"생성 완료: {output_path}")

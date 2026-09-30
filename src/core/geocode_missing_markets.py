@@ -46,7 +46,7 @@ from alt_vacancy_indicator import TARGET_MARKETS
 from safety_map import MARKET_COORDS
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CVS_DIR = os.path.join(BASE_DIR, "cvs")
+CVS_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs")
 OUT_CSV = os.path.join(CVS_DIR, "market_coords_geocoded.csv")
 
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"

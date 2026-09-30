@@ -28,8 +28,8 @@ SERVICE_KEY_BUILDING = os.environ.get("BUILDING_API_KEY", "")
 SANGGA_BASE = "https://apis.data.go.kr/B553077/api/open/sdsc2"
 BUILDING_BASE = "https://apis.data.go.kr/1613000/BldRgstHubService"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CVS_DIR = os.path.join(BASE_DIR, "cvs")
-HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
+CVS_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs")
+HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html")
 
 # 스캔할 구들 - 서울 25개구 전체(commercial_vacancy_screening.py와 동일 범위로 확장,
 # 2026-09-01 최초 버전은 8개구 하드코딩이었음). 구당 40건씩 = 최대 1,000건.

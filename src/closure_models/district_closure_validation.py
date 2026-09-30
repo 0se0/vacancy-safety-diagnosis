@@ -31,8 +31,8 @@ from scipy import stats
 from closure_risk_classifier import main as run_closure_model
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CVS_DIR = os.path.join(BASE_DIR, "cvs")
-CVS2_DIR = os.path.join(BASE_DIR, "cvs2")
+CVS_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs")
+CVS2_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs2")
 MAPPING_PATH = os.path.join(CVS2_DIR, "상권영역_자치구매핑.csv")
 
 

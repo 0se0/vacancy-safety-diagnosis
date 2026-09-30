@@ -40,7 +40,7 @@ from risk_grade_model import MARKET_ENERGY_TREND
 from safety_map import MARKET_COORDS
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
+HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html")
 
 NEAR_DUP_M = 100  # 이 거리(m) 미만이면 "같은 실체 의심" 후보로 본다
 SEOUL_LAT_RANGE = (37.40, 37.75)

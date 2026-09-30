@@ -48,8 +48,8 @@ SERVICE_KEY_SANGGA = os.environ.get("SANGGA_API_KEY", "")
 SANGGA_BASE = "https://apis.data.go.kr/B553077/api/open/sdsc2"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CVS2_DIR = os.path.join(BASE_DIR, "cvs2")
-HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
+CVS2_DIR = os.path.join(os.path.dirname(BASE_DIR), "cvs2")
+HTML_DIR = os.path.join(os.path.dirname(os.path.dirname(BASE_DIR)), "html")
 
 # 서울 25개구 전체 (commercial_vacancy_screening.py, verification_scan.py와 동일 범위로
 # 확장 - 2026-09-01 최초 버전은 8개구 하드코딩이었음). MAX_PAGES_PER_GU 캡은 그대로
