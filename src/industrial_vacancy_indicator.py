@@ -231,7 +231,7 @@ if __name__ == "__main__":
         print(f"  {r['단지_표시명']:35s} 입주 {r['입주업체(개)']:5d}개 / 가동 {r['가동업체(개)']:5d}개  가동률 {r['가동률']}%")
 
     html = generate(result)
-    output_path = os.path.join(BASE_DIR, "html", "역산공실탐지기반_산업단지가동률.html")
+    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", "역산공실탐지기반_산업단지가동률.html")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"\nHTML 생성 완료: {output_path}")

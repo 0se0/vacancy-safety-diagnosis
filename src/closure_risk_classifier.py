@@ -41,7 +41,7 @@ import pandas as pd
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CVS_DIR = os.path.join(BASE_DIR, "cvs")
-HTML_DIR = os.path.join(BASE_DIR, "html")
+HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score, confusion_matrix

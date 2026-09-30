@@ -49,7 +49,7 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CVS_DIR = os.path.join(BASE_DIR, "cvs")
-HTML_DIR = os.path.join(BASE_DIR, "html")
+HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
 ENRICHED_CSV = os.path.join(CVS_DIR, "vacancy_candidates_enriched.csv")
 UNRESOLVABLE_CSV = os.path.join(CVS_DIR, "vacancy_candidates_unresolvable.csv")
 

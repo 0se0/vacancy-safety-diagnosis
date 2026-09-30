@@ -81,7 +81,7 @@ flowchart LR
     D4 -.표본 제공.-> C1
 ```
 
-각 체인은 독립적으로 실행 가능하며, 산출물은 `cvs/*.csv`(로컬 전용, 미커밋)와
+각 체인은 독립적으로 실행 가능하며, 산출물은 `src/cvs/*.csv`(로컬 전용, 미커밋)와
 `html/*.html`(커밋됨, GitHub Pages처럼 바로 열람 가능)로 나온다.
 
 ---
@@ -229,70 +229,73 @@ BUILDING_API_KEY= # 국토교통부 건축HUB API
 
 | 파일/폴더 | 출처 | 비고 |
 |---|---|---|
-| `cvs/서울시_상권분석서비스_점포-상권__20XX년.csv` (2021~2025) | 서울시 우리마을가게 상권분석서비스 | |
-| `cvs/임대동향_지역별_*.csv` | 한국부동산원 상업용부동산 임대동향 | |
-| `cvs/한국산업단지공단_전국산업단지현황통계_노후산업단지_*.csv` | 한국산업단지공단 | |
-| `국토교통부_전국_법정동_20260630.csv` | 국토교통부 | 법정동코드 매핑용 |
-| `cvs2/전기에너지/*.csv`, `cvs2/가스에너지/*.csv` | 한국전력·도시가스 공급량 통계 (월별, 지역별) | 용량이 커서 로컬 전용 |
-| `cvs2/건축물대장 정보_표제부.csv` | 건축데이터 개방시스템(open.eais.go.kr) | 서울 일부 표본 |
-| `cvs2/건축물대장_표제부_8개구_전체.csv`, `cvs2/건축물대장_표제부_17개구_전체.csv` | 건축HUB "원하는대로 건축데이터" (지역: 8개구+17개구=25개구, 종류: 건축물대장, CSV) | commercial_vacancy_screening.py 필수 입력(둘 다 필요) |
+| `src/cvs/서울시_상권분석서비스_점포-상권__20XX년.csv` (2021~2025) | 서울시 우리마을가게 상권분석서비스 | |
+| `src/cvs/임대동향_지역별_*.csv` | 한국부동산원 상업용부동산 임대동향 | |
+| `src/cvs/한국산업단지공단_전국산업단지현황통계_노후산업단지_*.csv` | 한국산업단지공단 | |
+| `src/국토교통부_전국_법정동_20260630.csv` | 국토교통부 | 법정동코드 매핑용 |
+| `src/cvs2/전기에너지/*.csv`, `src/cvs2/가스에너지/*.csv` | 한국전력·도시가스 공급량 통계 (월별, 지역별) | 용량이 커서 로컬 전용 |
+| `src/cvs2/건축물대장 정보_표제부.csv` | 건축데이터 개방시스템(open.eais.go.kr) | 서울 일부 표본 |
+| `src/cvs2/건축물대장_표제부_8개구_전체.csv`, `src/cvs2/건축물대장_표제부_17개구_전체.csv` | 건축HUB "원하는대로 건축데이터" (지역: 8개구+17개구=25개구, 종류: 건축물대장, CSV) | commercial_vacancy_screening.py 필수 입력(둘 다 필요) |
 
 ## 실행 순서
 
 스크립트 간 실행 순서를 강제하는 장치는 없으므로 아래 순서를 사람이 지켜서
 실행해야 합니다. 괄호 안은 각 단계가 만드는 산출물입니다.
 
+모든 스크립트는 `src/` 아래에 있으며, 산출물 `html/`은 저장소 루트에 별도로 분리되어
+있습니다(스크립트가 실행 위치와 무관하게 `src/`의 부모 폴더를 자동으로 찾아 씁니다).
+
 **체인 A — 실측 검증 → 건물연식 보강 → 의심건물 스크리닝**
 ```
-python verification_scan.py          # cvs/verification_log.csv
-python enrich_building_age.py        # cvs/verification_log_with_age.csv
-python suspicious_building_ranking.py
+python src/verification_scan.py          # src/cvs/verification_log.csv
+python src/enrich_building_age.py        # src/cvs/verification_log_with_age.csv
+python src/suspicious_building_ranking.py
 ```
 
 **체인 B — 점포수 지표 → 안전등급 → 지도**
 ```
-python alt_vacancy_indicator.py      # (risk_grade_model.py가 analyze() 재사용)
-python market_energy_matching.py     # TARGET_MARKETS를 상가정보 API 건물명과 구 단위로 안전
+python src/alt_vacancy_indicator.py      # (risk_grade_model.py가 analyze() 재사용)
+python src/market_energy_matching.py     # TARGET_MARKETS를 상가정보 API 건물명과 구 단위로 안전
                                       # 매칭해 전력사용량 추세 추출 (선택 — 출력된 코드를
                                       # risk_grade_model.py의 MARKET_ENERGY_TREND에 수동으로
                                       # 반영해야 함. 동일 건물에 여러 상권명이 매칭될 수 있어
                                       # 그대로 붙여넣지 말고 검토 필요)
-python market_energy_matching_by_coords.py  # 위에서 매칭 안 된 나머지를 건물명 대신 좌표
+python src/market_energy_matching_by_coords.py  # 위에서 매칭 안 된 나머지를 건물명 대신 좌표
                                       # 반경(150m)으로 재시도 (선택 — geocode_missing_markets.py로
                                       # 좌표를 먼저 채워야 의미 있음. 반경 안 건물이 유일한
                                       # 경우만 채택하는데 시장은 대개 건물이 몰려 있어서
                                       # 수확이 적을 수 있음 - 실측 138곳 중 1곳)
-python risk_grade_model.py           # (safety_map.py가 compute_risk_grades() 재사용)
-python geocode_missing_markets.py    # TARGET_MARKETS 중 safety_map.py의 MARKET_COORDS에 없는
+python src/risk_grade_model.py           # (safety_map.py가 compute_risk_grades() 재사용)
+python src/geocode_missing_markets.py    # TARGET_MARKETS 중 safety_map.py의 MARKET_COORDS에 없는
                                       # 상권만 OSM Nominatim으로 지오코딩 (선택 — 좌표 다 채운
                                       # 뒤엔 안 돌려도 됨, 새 상권 추가될 때만 재실행)
-python safety_map.py
+python src/safety_map.py
 ```
 
 **체인 C — 에너지 지표 (전기/가스 사용량)**
 ```
-python energy_vacancy_indicator.py   # 25개구 상가 스캔(구당 상한 있음) + 에너지 조인 + 상관관계
+python src/energy_vacancy_indicator.py   # 25개구 상가 스캔(구당 상한 있음) + 에너지 조인 + 상관관계
 ```
 
 **체인 D — 공실 후보 전수 스크리닝 → 에너지 3중검증**
 ```
-python commercial_vacancy_screening.py   # cvs/vacancy_candidates.csv (서울 25개구 전수 차집합)
-python link_candidates_to_energy.py      # 위 후보를 새주소코드 확보 후 에너지와 조인
+python src/commercial_vacancy_screening.py   # src/cvs/vacancy_candidates.csv (서울 25개구 전수 차집합)
+python src/link_candidates_to_energy.py      # 위 후보를 새주소코드 확보 후 에너지와 조인
                                           # (일일 API 호출한도로 여러 회차에 걸쳐 이어 실행될 수 있음.
                                           #  재실행 시 이미 해결된 후보는 자동으로 건너뜀)
 ```
 
 **독립 실행 (서로 의존관계 없음)**
 ```
-python dashboard.py
-python clustering.py
-python industrial_vacancy_indicator.py
-python closure_risk_classifier.py
-python vacancy_matching_poc.py
-python anomaly_detection.py       # closure_risk_classifier.py 실행 후 - 같은 데이터로 RF vs
+python src/dashboard.py
+python src/clustering.py
+python src/industrial_vacancy_indicator.py
+python src/closure_risk_classifier.py
+python src/vacancy_matching_poc.py
+python src/anomaly_detection.py       # closure_risk_classifier.py 실행 후 - 같은 데이터로 RF vs
                                    # Isolation Forest 비교 (closure_risk_classifier.py의
                                    # load_panel/build_features/FEATURES 재사용)
-python data_quality_report.py     # 체인 B(alt_vacancy_indicator, risk_grade_model,
+python src/data_quality_report.py     # 체인 B(alt_vacancy_indicator, risk_grade_model,
                                    # safety_map) 실행 후 - MARKET_COORDS/MARKET_ENERGY_TREND
                                    # 정합성·근접좌표 자동 검사
 ```

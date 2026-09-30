@@ -279,8 +279,8 @@ new Chart(document.getElementById('barChart'), {{
 if __name__ == "__main__":
     result = analyze()
     html = generate(result)
-    os.makedirs(os.path.join(BASE_DIR, "html"), exist_ok=True)
-    output_path = os.path.join(BASE_DIR, "html", "역산공실탐지기반_의심건물스크리닝.html")
+    os.makedirs(os.path.join(os.path.dirname(BASE_DIR), "html"), exist_ok=True)
+    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", "역산공실탐지기반_의심건물스크리닝.html")
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"\nHTML 생성 완료: {output_path}")

@@ -12,7 +12,7 @@ import numpy as np
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CVS_DIR = os.path.join(BASE_DIR, "cvs")
-HTML_DIR = os.path.join(BASE_DIR, "html")
+HTML_DIR = os.path.join(os.path.dirname(BASE_DIR), "html")
 
 REGIONS = ["서울", "부산", "대구", "인천", "광주", "대전", "울산", "세종",
            "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주"]

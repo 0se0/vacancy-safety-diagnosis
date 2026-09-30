@@ -290,7 +290,7 @@ if __name__ == '__main__':
     print('HTML 생성 중...')
     html = generate(data)
 
-    output_path = os.path.join(BASE_DIR, "html", '역산공실탐지기반_대시보드.html')
+    output_path = os.path.join(os.path.dirname(BASE_DIR), "html", '역산공실탐지기반_대시보드.html')
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html)
     print(f"생성 완료: {output_path}")
