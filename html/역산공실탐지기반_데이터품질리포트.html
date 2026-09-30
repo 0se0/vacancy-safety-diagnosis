@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>역산공실탐지기반 — 데이터 품질 리포트</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f8f7; color: #0b0b0b; padding: 2rem; }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  h2 { font-size: 14px; font-weight: 600; margin: 1.75rem 0 0.75rem; }
+  .subtitle { font-size: 12px; color: #898781; margin-bottom: 1.5rem; }
+  .caveat { background: #eff6ff; border-left: 3px solid #2a78d6; padding: 0.875rem 1.1rem; font-size: 12px; color: #52514e; margin-bottom: 1.5rem; line-height: 1.7; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .kpi-card { background: #f1f0eb; border-radius: 8px; padding: 1rem; text-align: center; }
+  .kpi-label { font-size: 12px; color: #898781; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 600; }
+  .kpi-sub { font-size: 11px; color: #898781; margin-top: 4px; }
+  .status-ok { color: #3b6d11; font-weight: 600; }
+  .status-warn { color: #e34948; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 1rem; }
+  th { text-align: left; color: #898781; font-weight: 500; padding: 6px 8px; border-bottom: 1px solid #e8e7e2; }
+  td { padding: 6px 8px; border-bottom: 1px solid #f1f0eb; }
+  .note { font-size: 11px; color: #898781; margin-top: 1.5rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+<h1>데이터 품질 리포트 — 자동 검사</h1>
+<div class="subtitle">TARGET_MARKETS / MARKET_COORDS / MARKET_ENERGY_TREND 및 핵심 산출물 대상 자동 검증</div>
+
+<div class="caveat">
+📍 이 리포트는 문제를 자동으로 고치지 않는다. "사람이 확인해야 할 후보"를 찾아서 표로 만드는 게 목적이다 —
+61개 근접 좌표쌍을 전부 자동으로 병합·제외하면, "동대문상가A~D동"처럼 원래 같은 단지 안의 서로 다른 동을
+가리키는 정상 케이스까지 잘못 지워버릴 위험이 있다.
+</div>
+
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">좌표 확보율</div>
+    <div class="kpi-value">61.7%</div>
+    <div class="kpi-sub">171/277곳</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">에너지 신호 확보율</div>
+    <div class="kpi-value">15.2%</div>
+    <div class="kpi-sub">42/277곳</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">활동 극소 상권</div>
+    <div class="kpi-value">9.0%</div>
+    <div class="kpi-sub">25/277곳 (자동 D처리)</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">신규 발견 근접쌍</div>
+    <div class="kpi-value" style="color:#3b6d11;">57</div>
+    <div class="kpi-sub">그중 즉시확인 0건</div>
+  </div>
+</div>
+
+<h2>1. 유일성 — 좌표가 비정상적으로 가까운 서로 다른 상권명 (반경 100m)</h2>
+<p style="font-size:12px;color:#52514e;margin-bottom:0.75rem;">
+전체 61쌍 중 이전 세션에서 이미 확인·제외한 4쌍 제외, <b>신규 발견 57쌍</b>
+
+</p>
+<table>
+  <thead><tr><th>상권 A</th><th>상권 B</th><th>거리</th><th>등급</th><th>비고</th></tr></thead>
+  <tbody><tr><td>동대문상가A동</td><td>동대문상가B동</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가A동</td><td>동대문상가C동</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가A동</td><td>동대문상가D동</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가A동</td><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가A동</td><td>동대문패션타운 관광특구</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가B동</td><td>동대문상가C동</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가B동</td><td>동대문상가D동</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가B동</td><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가B동</td><td>동대문패션타운 관광특구</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가C동</td><td>동대문상가D동</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가C동</td><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가C동</td><td>동대문패션타운 관광특구</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가D동</td><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문상가D동</td><td>동대문패션타운 관광특구</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>남대문시장(자유상가)</td><td>삼익패션타운(남대문시장)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>남대문시장(자유상가)</td><td>숭례문수입상가(남대문시장)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>청평화시장</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>동평화시장</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>신림중앙시장(조원동 펭귄시장)</td><td>신림종합시장</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>삼익패션타운(남대문시장)</td><td>숭례문수입상가(남대문시장)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>동대문패션타운 관광특구</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>청평화시장</td><td>동평화시장</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>고척근린시장</td><td>개봉프라자(고척근린시장)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>공항시장역 1번</td><td>공항시장역 3번</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>서울중앙시장(신중앙시장)</td><td>황학시장(서울중앙시장, 신중앙시장)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>신원시장</td><td>관악종합시장(신원시장)</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>공항시장</td><td>공항시장역 1번</td><td>14.2m</td><td><50m</td><td></td></tr><tr><td>공항시장</td><td>공항시장역 3번</td><td>14.2m</td><td><50m</td><td></td></tr><tr><td>동대문상가A동</td><td>영신상가(제일상가)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>동대문상가B동</td><td>영신상가(제일상가)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>동대문상가C동</td><td>영신상가(제일상가)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>동대문상가D동</td><td>영신상가(제일상가)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>영신상가(제일상가)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>동대문패션타운 관광특구</td><td>영신상가(제일상가)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>신신림시장(삼성동시장)</td><td>삼성동 시장(삼성동시장)</td><td>22.2m</td><td><50m</td><td></td></tr><tr><td>유진상가</td><td>인왕시장(홍제골목형상점가)</td><td>34.5m</td><td><50m</td><td></td></tr><tr><td>제일시장</td><td>중곡제일시장(중곡제일골목시장, 광성시장)</td><td>34.5m</td><td><50m</td><td></td></tr><tr><td>영등포전통시장</td><td>영등포시장기계공구상가</td><td>83.1m</td><td><100m</td><td></td></tr><tr><td>광장시장(광장전통시장)</td><td>마전교지하쇼핑센터(구 한일상가)</td><td>88.1m</td><td><100m</td><td></td></tr><tr><td>동대문상가A동</td><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가A동</td><td>청평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가A동</td><td>동평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가B동</td><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가B동</td><td>청평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가B동</td><td>동평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가C동</td><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가C동</td><td>청평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가C동</td><td>동평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가D동</td><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가D동</td><td>청평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문상가D동</td><td>동평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>평화시장(남평화시장, 제일평화시장, 신평화패션타운)</td><td>동대문패션타운 관광특구</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>청평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문종합시장(동대문종합시장 신관, 동대문종합시장D동상가)</td><td>동평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문패션타운 관광특구</td><td>청평화시장</td><td>90.9m</td><td><100m</td><td></td></tr><tr><td>동대문패션타운 관광특구</td><td>동평화시장</td><td>90.9m</td><td><100m</td><td></td></tr></tbody>
+</table>
+<details><summary style="font-size:12px;color:#898781;cursor:pointer;">이미 확인·제외 처리된 4쌍 보기</summary>
+<table style="margin-top:0.5rem;">
+  <thead><tr><th>상권 A</th><th>상권 B</th><th>거리</th><th>등급</th><th>비고</th></tr></thead>
+  <tbody><tr><td>영등포시장역 1번</td><td>영등포시장역 3번</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>영등포시장역 1번</td><td>영등포시장역 4번</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>영등포시장역 3번</td><td>영등포시장역 4번</td><td>0.0m</td><td>동일(0m)</td><td></td></tr><tr><td>가락시장</td><td>가락시장역</td><td>34.6m</td><td><50m</td><td></td></tr></tbody>
+</table>
+</details>
+
+<h2>2. 유효성</h2>
+<table>
+  <tr><td>좌표가 서울 대략 경계 밖인 상권</td><td class="status-ok">0건</td></tr>
+  <tr><td>전력사용량 추세 절대값 50% 초과(극단값 — 이미 알려진 것 포함)</td><td>1건</td></tr>
+</table>
+
+<h2>3. 정합성 (TARGET_MARKETS ⊇ MARKET_COORDS ⊇ MARKET_ENERGY_TREND)</h2>
+<table>
+  <tr><td>MARKET_COORDS에 있는데 TARGET_MARKETS엔 없는 상권</td><td class="status-ok">0건</td></tr>
+  <tr><td>MARKET_ENERGY_TREND에 있는데 MARKET_COORDS엔 없는 상권</td><td class="status-ok">0건</td></tr>
+</table>
+<p style="font-size:12px;color:#3b6d11;">✅ 포함관계 위반 없음</p>
+
+<div class="note">
+※ 방법론: MARKET_COORDS(277곳 중 좌표 확보 171곳)의 모든 쌍(171×170/2≈14,535쌍)에 대해 haversine 거리를
+계산, 100m 미만인 쌍을 후보로 뽑았다. 이전 세션에서 에너지 매칭 과정 중 우연히 발견했던 쌍(화곡중앙시장=
+신월중앙시장, 가락시장=가락시장역 등)은 "이미 확인" 처리하고, 그 외 새로 나온 쌍만 "신규 발견"으로 구분했다.<br>
+근접하다고 반드시 같은 실체인 건 아니다(동대문상가A~D동처럼 한 단지의 여러 동을 가리키는 정상 케이스도
+포함) — 이 리포트는 사람이 검토할 후보 목록이지 자동 판정 결과가 아니다.
+</div>
+
+</body>
+</html>
