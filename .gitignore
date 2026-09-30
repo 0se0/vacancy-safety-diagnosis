@@ -4,3 +4,4 @@ __pycache__/
 cvs2/
 *.csv
 PORTFOLIO_NOTES.md
+.DS_Store
