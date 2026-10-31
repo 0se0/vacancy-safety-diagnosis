@@ -9,7 +9,7 @@
 
 Official building registries never record "this store is vacant" — the only way to
 find out is to notice that nobody is actually operating there. In May 2025, a fire
-near Seoun Sangga market revealed that ~40 of 114 stores in one building had already
+near Sewoon Sangga market revealed that ~40 of 114 stores in one building had already
 been vacant, with no record anywhere showing it. This project reverse-engineers
 vacancy by diffing Seoul's official building registry against live business-operation
 data, then cross-checks the result with electricity/gas usage so "needs on-site
