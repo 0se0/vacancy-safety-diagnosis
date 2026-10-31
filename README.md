@@ -1,8 +1,47 @@
 # 역산공실탐지 — 노후 상업건물 안전사각지대 진단 모델
+### Reverse Vacancy Detection — Safety-Risk Diagnosis for Aging Commercial Buildings
 
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Status](https://img.shields.io/badge/status-active-brightgreen)
+
+## English Summary
+
+Official building registries never record "this store is vacant" — the only way to
+find out is to notice that nobody is actually operating there. In May 2025, a fire
+near Seoun Sangga market revealed that ~40 of 114 stores in one building had already
+been vacant, with no record anywhere showing it. This project reverse-engineers
+vacancy by diffing Seoul's official building registry against live business-operation
+data, then cross-checks the result with electricity/gas usage so "needs on-site
+inspection" candidates can be narrowed from public data alone, without a full manual
+sweep.
+
+**🏆 Outstanding Excellence Award (2nd of 47 teams) — 2026 Public Data Utilization
+Idea Competition, Soongsil University**
+
+| Metric | Result |
+|---|---|
+| Buildings scanned, all 25 Seoul districts | **116,571** |
+| Vacancy candidates (registry − actual-operation diff) | **33,135** (28.4%) |
+| Candidates address-matched to energy-usage data | **30,154** (91.0%, fully processed) |
+| Final high-confidence candidates (registry + no-listing + no energy use, all 3 signals) | **3,953** (~3.4%) |
+| Field check via live public APIs (25 districts, 870 buildings) | **90.8%** of multi-unit buildings show registry↔actual mismatch |
+| Safety grades (A–D) computed for aging markets/malls | **277** venues (D 63 · C 60 · B 104 · A 50; 171/277 plotted on the map) |
+| Closure early-warning model (Random Forest, time-split validation) | **AUC 0.881** vs. **0.183** for a naive baseline rule |
+| Unsupervised anomaly detection (Isolation Forest) control experiment | AUC 0.555 — confirms the task structurally needs supervised labels, not just a better algorithm |
+| Store-count vs. electricity-usage correlation | Pearson r = 0.307, Spearman r = 0.366 (both p < 0.001, n = 48,089) |
+
+All write-ups, the interactive map, and the statistical evidence behind every number
+above are on the **[results page](https://0se0.github.io/vacancy-safety-diagnosis/)**.
+Full pipeline, engineering notes (API-failure handling, checkpointing), model
+validation details, and known limitations are documented below in Korean — the same
+content this README covers end to end.
+
+**Stack**: Python · pandas · scikit-learn (Random Forest, K-Means) · statistical
+testing (Pearson/Spearman, two-proportion z-test) · public REST APIs (소상공인시장진흥공단
+상가정보, 국토교통부 건축HUB) · Leaflet.js
+
+---
 
 > **"등록된 정보와 실제로 일어나는 일은 다르다."**
 > 2025년 5월, 세운상가 화재 당시 114개 점포 중 40여 개가 이미 공실이었다는 사실이
@@ -14,7 +53,7 @@
 전기·가스 사용량, 점포 수 시계열, 폐업률까지 겹쳐서 "확정 공실"이 아니라 "지금
 확인이 필요한 후보"를 데이터로 좁혔다.
 
-### 🏆 ***2026 공공데이터 활용 경진대회 최우수상***
+### 🏆 ***2026 공공데이터 활용 아이디어 경진대회 최우수상 (2/47팀)***
 
 ---
 
